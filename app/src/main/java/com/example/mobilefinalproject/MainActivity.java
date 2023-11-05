@@ -3,7 +3,6 @@ package com.example.mobilefinalproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.widget.VideoView;
 
 public class MainActivity extends AppCompatActivity {
 
