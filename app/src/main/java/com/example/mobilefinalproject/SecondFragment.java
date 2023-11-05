@@ -1,5 +1,7 @@
 package com.example.mobilefinalproject;
 
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +9,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.VideoView;
+
+import com.example.mobilefinalproject.databinding.FragmentSecondBinding;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +19,9 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class SecondFragment extends Fragment {
+
+    private FragmentSecondBinding binding;
+    VideoView videoView;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,12 +61,26 @@ public class SecondFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        videoView = (VideoView) binding.vvLoginBackground;
+        Uri uri = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.mp_video);
+        videoView.setVideoURI(uri);
+        videoView.start();
+
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+
+                mediaPlayer.setLooping(true);
+            }
+        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_second, container, false);
+        binding = FragmentSecondBinding.inflate(getLayoutInflater());
+        return binding.getRoot();
     }
 }
