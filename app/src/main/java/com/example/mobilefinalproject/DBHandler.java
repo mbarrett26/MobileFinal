@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBHandler extends SQLiteOpenHelper {
-    private static final String DB_Name = "notesDb";
+    private static final String DB_Name = "restaurantDb";
     private static final int DB_Version = 1;
 
     public DBHandler(Context context) {
@@ -26,13 +26,13 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query = "CREATE TABLE " + DB_Table + " ("
+        String user_query = "CREATE TABLE " + DB_Table + " ("
                 + Col_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + Col_Username + " TEXT, "
                 + Col_Password + " TEXT " +
                 ")";
 
-        db.execSQL(query);
+        db.execSQL(user_query);
     }
 
     @Override
