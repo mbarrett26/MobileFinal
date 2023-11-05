@@ -34,6 +34,16 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
+    configurations.all {
+        resolutionStrategy {
+            eachDependency {
+                if ((requested.group == "org.jetbrains.kotlin") && (requested.name.startsWith("kotlin-stdlib"))) {
+                    useVersion("1.8.0")
+                }
+            }
+        }
+    }
+
 }
 
 dependencies {

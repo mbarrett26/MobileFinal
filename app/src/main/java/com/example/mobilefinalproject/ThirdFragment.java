@@ -62,6 +62,13 @@ public class ThirdFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        binding = FragmentThirdBinding.inflate(getLayoutInflater());
 
         videoView = (VideoView) binding.vvRegisterBackground;
         Uri uri = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.mp_video);
@@ -75,13 +82,7 @@ public class ThirdFragment extends Fragment {
                 mediaPlayer.setLooping(true);
             }
         });
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        binding = FragmentThirdBinding.inflate(getLayoutInflater());
         return binding.getRoot();
     }
 }

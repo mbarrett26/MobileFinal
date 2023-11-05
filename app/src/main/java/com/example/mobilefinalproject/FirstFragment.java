@@ -65,9 +65,16 @@ public class FirstFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        binding = FragmentFirstBinding.inflate(getLayoutInflater());
 
         videoView = (VideoView) binding.vvHomeBackground;
-        Uri uri = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.mp_video);
+        Uri uri = Uri.parse("android.resource://com.example.mobilefinalproject/" + R.raw.spiderman);
         videoView.setVideoURI(uri);
         videoView.start();
 
@@ -78,15 +85,28 @@ public class FirstFragment extends Fragment {
                 mediaPlayer.setLooping(true);
             }
         });
+
+        return binding.getRoot();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        binding = FragmentFirstBinding.inflate(getLayoutInflater());
-        return binding.getRoot();
+    public void onResume(){
+        videoView.resume();
+        super.onResume();
     }
+
+    @Override
+    public void onPause(){
+        videoView.suspend();
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy(){
+        videoView.stopPlayback();
+        super.onDestroy();
+    }
+
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
