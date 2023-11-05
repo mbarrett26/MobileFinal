@@ -85,4 +85,23 @@ public class ThirdFragment extends Fragment {
 
         return binding.getRoot();
     }
+
+
+    @Override
+    public void onResume(){
+        videoView.resume();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause(){
+        videoView.suspend();
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy(){
+        videoView.stopPlayback();
+        super.onDestroy();
+    }
 }
