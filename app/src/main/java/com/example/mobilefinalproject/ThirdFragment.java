@@ -58,10 +58,10 @@ public class ThirdFragment extends Fragment {
         binding = FragmentThirdBinding.inflate(getLayoutInflater());
 
 
-/*
+
         videoView = (VideoView) binding.vvRegisterBackground;
         Uri uri = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.mp_video);
-        //videoView.setVideoURI(uri);
+        videoView.setVideoURI(uri);
         videoView.start();
 
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -71,7 +71,7 @@ public class ThirdFragment extends Fragment {
                 mediaPlayer.setLooping(true);
             }
         });
-*/
+
 
         return binding.getRoot();
     }

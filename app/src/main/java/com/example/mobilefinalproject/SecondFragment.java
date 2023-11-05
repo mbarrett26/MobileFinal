@@ -56,9 +56,9 @@ public class SecondFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentSecondBinding.inflate(getLayoutInflater());
 
-      /*  videoView = (VideoView) binding.vvLoginBackground;
+        videoView = (VideoView) binding.vvLoginBackground;
         Uri uri = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.mp_video);
-        //videoView.setVideoURI(uri);
+        videoView.setVideoURI(uri);
         videoView.start();
 
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -67,7 +67,7 @@ public class SecondFragment extends Fragment {
 
                 mediaPlayer.setLooping(true);
             }
-        }); */
+        });
 
         return binding.getRoot();
     }

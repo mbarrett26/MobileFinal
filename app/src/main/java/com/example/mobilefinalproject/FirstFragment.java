@@ -74,8 +74,8 @@ public class FirstFragment extends Fragment {
         binding = FragmentFirstBinding.inflate(getLayoutInflater());
 
         videoView = (VideoView) binding.vvHomeBackground;
-        Uri uri = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.spiderman);
-        //videoView.setVideoURI(uri);
+        Uri uri = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.mp_video);
+        videoView.setVideoURI(uri);
         videoView.start();
 
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
