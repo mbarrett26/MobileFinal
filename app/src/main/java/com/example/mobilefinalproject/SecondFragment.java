@@ -4,7 +4,9 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,7 +73,7 @@ public class SecondFragment extends Fragment {
 
         videoView = (VideoView) binding.vvLoginBackground;
         Uri uri = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.mp_video);
-        videoView.setVideoURI(uri);
+        //videoView.setVideoURI(uri);
         videoView.start();
 
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -102,5 +104,25 @@ public class SecondFragment extends Fragment {
     public void onDestroy(){
         videoView.stopPlayback();
         super.onDestroy();
+    }
+
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        binding.btnReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment.findNavController(SecondFragment.this).navigate(R.id.action_secondFragment_to_firstFragment);
+            }
+        });
+
+        binding.btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //CALL DB AND AUTHENTICATE USER :)
+
+                NavHostFragment.findNavController(SecondFragment.this).navigate(R.id.action_secondFragment_to_fourthFragment);
+            }
+        });
     }
 }

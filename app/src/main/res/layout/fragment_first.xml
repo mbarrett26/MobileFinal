@@ -19,13 +19,25 @@
 
     <Button
         android:id="@+id/btn_loginPage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
+        android:layout_width="122dp"
+        android:layout_height="57dp"
+        android:text="Login"
         app:layout_constraintBottom_toBottomOf="@+id/vv_homeBackground"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.446"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/vv_homeBackground"
-        app:layout_constraintVertical_bias="0.8" />
+        app:layout_constraintVertical_bias="0.66" />
+
+    <Button
+        android:id="@+id/btn_registerPage"
+        android:layout_width="129dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="52dp"
+        android:text="Register"
+        app:layout_constraintBottom_toBottomOf="@+id/vv_homeBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_loginPage"
+        app:layout_constraintVertical_bias="0.073" />
 </androidx.constraintlayout.widget.ConstraintLayout>

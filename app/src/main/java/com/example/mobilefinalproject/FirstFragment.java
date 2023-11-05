@@ -75,7 +75,7 @@ public class FirstFragment extends Fragment {
 
         videoView = (VideoView) binding.vvHomeBackground;
         Uri uri = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.spiderman);
-        videoView.setVideoURI(uri);
+        //videoView.setVideoURI(uri);
         videoView.start();
 
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -115,6 +115,13 @@ public class FirstFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 NavHostFragment.findNavController(FirstFragment.this).navigate(R.id.action_firstFragment_to_secondFragment);
+            }
+        });
+
+        binding.btnRegisterPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment.findNavController(FirstFragment.this).navigate(R.id.action_firstFragment_to_thirdFragment);
             }
         });
     }

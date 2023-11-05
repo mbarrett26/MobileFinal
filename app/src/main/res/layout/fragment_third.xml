@@ -91,5 +91,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageButton
+        android:id="@+id/btn_return"
+        android:layout_width="70dp"
+        android:layout_height="69dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        card_view:srcCompat="@android:drawable/ic_menu_revert" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
