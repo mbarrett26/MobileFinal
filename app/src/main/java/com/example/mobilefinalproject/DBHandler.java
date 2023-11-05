@@ -41,12 +41,12 @@ public class DBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void registerNewUser(String name, String pass){
+    public void addUser(User inputAcc){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(Col_Username, name);
-        values.put(Col_Password, pass);
+        values.put(Col_Username, inputAcc.getUsername().toLowerCase());
+        values.put(Col_Password, inputAcc.getPassword());
 
         db.insert(DB_Table, null, values);
 
@@ -70,4 +70,67 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         return users;
     }
+
+    public boolean checkUser(String nameInput) {
+        // array of columns to fetch
+        String[] columns = {
+                Col_ID
+        };
+        SQLiteDatabase db = this.getReadableDatabase();
+        // selection criteria
+        String selection = Col_Username + " = ?";
+        // selection argument
+        String[] selectionArgs = {nameInput.toLowerCase()};
+        // query user table with condition
+
+        Cursor cursor = db.query(DB_Table, //Table to query
+                columns,                    //columns to return
+                selection,                  //columns for the WHERE clause
+                selectionArgs,              //The values for the WHERE clause
+                null,                       //group the rows
+                null,                      //filter by row groups
+                null);                      //The sort order
+        int cursorCount = cursor.getCount();
+        cursor.close();
+        db.close();
+        if (cursorCount > 0) {
+            return true;
+        }
+        return false;
+    }
+    /**
+     * This method to check user exist or not
+     *
+     * @param acc
+     * @return true/false
+     */
+    public boolean checkAcc(User acc) {
+        // array of columns to fetch
+        String[] columns = {
+                Col_ID
+        };
+        SQLiteDatabase db = this.getReadableDatabase();
+        // selection criteria
+        String selection = Col_Username + " = ?" + " AND " + Col_Password + " = ?";
+        // selection arguments
+        String[] selectionArgs = {acc.getUsername().toLowerCase(), acc.getPassword()};
+        // query user table with conditions
+
+        Cursor cursor = db.query(DB_Table, //Table to query
+                columns,                    //columns to return
+                selection,                  //columns for the WHERE clause
+                selectionArgs,              //The values for the WHERE clause
+                null,                       //group the rows
+                null,                       //filter by row groups
+                null);                      //The sort order
+        int cursorCount = cursor.getCount();
+        cursor.close();
+        db.close();
+        if (cursorCount > 0) {
+            return true;
+        }
+        return false;
+    }
 }
+
+

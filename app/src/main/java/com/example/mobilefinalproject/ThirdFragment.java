@@ -1,5 +1,6 @@
 package com.example.mobilefinalproject;
 
+import android.accounts.Account;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,9 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.example.mobilefinalproject.databinding.FragmentSecondBinding;
@@ -26,33 +30,17 @@ public class ThirdFragment extends Fragment {
     private FragmentThirdBinding binding;
     VideoView videoView;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    DBHandler db;
+    private EditText passInp,userInp;
 
     public ThirdFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ThirdFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ThirdFragment newInstance(String param1, String param2) {
+
+    public static ThirdFragment newInstance() {
         ThirdFragment fragment = new ThirdFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,10 +48,7 @@ public class ThirdFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
@@ -72,6 +57,8 @@ public class ThirdFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentThirdBinding.inflate(getLayoutInflater());
 
+
+/*
         videoView = (VideoView) binding.vvRegisterBackground;
         Uri uri = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.mp_video);
         //videoView.setVideoURI(uri);
@@ -84,6 +71,7 @@ public class ThirdFragment extends Fragment {
                 mediaPlayer.setLooping(true);
             }
         });
+*/
 
         return binding.getRoot();
     }
@@ -91,39 +79,76 @@ public class ThirdFragment extends Fragment {
 
     @Override
     public void onResume(){
-        videoView.resume();
+    //    videoView.resume();
         super.onResume();
     }
 
     @Override
     public void onPause(){
-        videoView.suspend();
+  //      videoView.suspend();
         super.onPause();
     }
 
     @Override
     public void onDestroy(){
-        videoView.stopPlayback();
+    //    videoView.stopPlayback();
         super.onDestroy();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        db = new DBHandler(getActivity());
+        userInp=binding.edUsername;
+        passInp=binding.edPassword;
+
+
+
+        /*
         binding.btnReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NavHostFragment.findNavController(ThirdFragment.this).navigate(R.id.action_thirdFragment_to_firstFragment);
             }
-        });
+        }); */
 
         binding.btnReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //CALL DB AND REGISTER :)
-
-                NavHostFragment.findNavController(ThirdFragment.this).navigate(R.id.action_thirdFragment_to_firstFragment);
+               NavHostFragment.findNavController(ThirdFragment.this).navigate(R.id.action_thirdFragment_to_firstFragment);
             }
         });
+        binding.btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //CALL DB AND REGISTER :)
+              //  Toast.makeText(v.getContext(), "Hello", Toast.LENGTH_SHORT).show();
+                registerUser();
+                //NavHostFragment.findNavController(ThirdFragment.this).navigate(R.id.action_thirdFragment_to_firstFragment);
+            }
+        });
+    }
+
+    public void registerUser(){
+        String userName = String.valueOf(userInp.getText()).trim();
+        String userPass = String.valueOf(passInp.getText()).trim();
+
+        if (!(userName.isEmpty() || userPass.isEmpty())){
+            User reg = new User(userName,userPass);  //Creating a new user object.
+           //Toast.makeText(getActivity(), "Valid user input", Toast.LENGTH_SHORT).show();
+
+            if (!(db.checkUser(userName))){
+                db.addUser(reg);
+                Toast.makeText(getActivity(), "User Added", Toast.LENGTH_SHORT).show();
+            } else{
+                Toast.makeText(getActivity(), "User already exists. Please change username", Toast.LENGTH_SHORT).show();
+            }
+
+           //new Thread(reg).start();  //starting the registration thread.
+        }else{
+            Toast.makeText(getActivity(), "Invalid form input", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }
