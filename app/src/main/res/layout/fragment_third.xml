@@ -24,6 +24,7 @@
 
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="353dp"
         android:layout_gravity="center_horizontal"
@@ -42,13 +43,13 @@
             android:id="@+id/registerText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Register"
-            android:textAlignment="center"
-            android:textColor="@color/white"
             android:shadowColor="@color/text_shadow"
             android:shadowDx="1"
             android:shadowDy="1"
             android:shadowRadius="2"
+            android:text="Register"
+            android:textAlignment="center"
+            android:textColor="@color/white"
             android:textSize="40dp"
             android:textStyle="bold" />
 
@@ -95,10 +96,13 @@
         android:id="@+id/btn_return"
         android:layout_width="70dp"
         android:layout_height="69dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/back"
         card_view:srcCompat="@android:drawable/ic_menu_revert" />
 
 
