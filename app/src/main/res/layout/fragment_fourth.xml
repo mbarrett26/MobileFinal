@@ -7,15 +7,14 @@
     android:layout_height="match_parent"
     tools:context=".FourthFragment">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="184dp"
-        android:layout_height="124dp"
-        android:layout_marginStart="112dp"
-        android:layout_marginTop="292dp"
-        android:gravity="center"
-        android:text="Order Page"
-        android:textSize="40dp"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/menuBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -94,14 +94,16 @@
 
     <ImageButton
         android:id="@+id/btn_return"
-        android:layout_width="79dp"
-        android:layout_height="68dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
+        android:adjustViewBounds="true"
+        android:background="@null"
+        android:scaleType="fitCenter"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/back"
-       />
+        app:srcCompat="@android:drawable/ic_menu_revert" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

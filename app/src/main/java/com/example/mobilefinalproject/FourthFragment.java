@@ -3,12 +3,21 @@ package com.example.mobilefinalproject;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.example.mobilefinalproject.databinding.FragmentFourthBinding;
+import com.example.mobilefinalproject.databinding.FragmentSecondBinding;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +25,8 @@ import android.widget.Toast;
  * create an instance of this fragment.
  */
 public class FourthFragment extends Fragment {
+
+    private FragmentFourthBinding binding;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,7 +72,35 @@ public class FourthFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fourth, container, false);
+        binding = FragmentFourthBinding.inflate(getLayoutInflater());
+
+        setFragmentToolbar();
+        setToolbarMenu();
+
+        return binding.getRoot();
+    }
+
+    private void setFragmentToolbar() {
+        Toolbar toolbar = binding.menuBar;
+        ((MainActivity) requireActivity()).setSupportActionBar(toolbar);
+    }
+
+    private void setToolbarMenu() {
+        requireActivity().addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menuInflater.inflate(R.menu.menu, menu);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if(menuItem.getItemId() == R.id.action_search){
+
+                }
+
+                return false;
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 
     @Override
