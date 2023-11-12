@@ -19,25 +19,61 @@ public class DBHandler extends SQLiteOpenHelper {
         super(context, DB_Name, null, DB_Version);
     }
 
-    private static final String DB_Table = "userData";
+    private static final String DB_Table_1 = "userData";
     private static final String Col_ID = "id";
-    private static final String Col_Username = "username";
-    private static final String Col_Password = "password";
+    private static final String Col_Username_1 = "username";
+    private static final String Col_Password_1 = "password";
+
+    private static final String DB_Table_2 = "resturantItemData";
+    private static final String Col_name_2 = "itemname";
+    private static final String Col_price_2 = "price"; // could add image?
+
+    private static final String DB_Table_3 = "orderData";
+    private static final String Col_userid_3 = "userid";
+    private static final String Col_order_3 = "userorders";
+    private static final String Col_total_3 = "total"; //could also add location after
+
+
+    private static final String DB_Table_4 = "reviewData";
+    private static final String Col_userid_4 = "userid";
+    private static final String Col_reviewdata_4 = "reviewText";
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String user_query = "CREATE TABLE " + DB_Table + " ("
+        String user_query = "CREATE TABLE " + DB_Table_1 + " ("
                 + Col_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + Col_Username + " TEXT, "
-                + Col_Password + " TEXT " +
+                + Col_Username_1 + " TEXT, "
+                + Col_Password_1 + " TEXT " +
                 ")";
 
         db.execSQL(user_query);
+        user_query = "CREATE TABLE " + DB_Table_2 + " ("
+                + Col_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + Col_name_2 + " TEXT, "
+                + Col_price_2 + " TEXT " +
+                ")";
+        db.execSQL(user_query);
+        user_query = "CREATE TABLE " + DB_Table_3 + " ("
+                + Col_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + Col_userid_3 + " TEXT, "
+                + Col_order_3 + " JSON, "
+                + Col_total_3 + " TEXT " +
+                ")";
+        db.execSQL(user_query);
+        user_query = "CREATE TABLE " + DB_Table_4 + " ("
+                + Col_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + Col_userid_4 + " TEXT, "
+                + Col_reviewdata_4 + " TEXT " +
+                ")";
+        db.execSQL(user_query);
+
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + DB_Table);
+        db.execSQL("DROP TABLE IF EXISTS " + DB_Table_1);
+        db.execSQL("DROP TABLE IF EXISTS " + DB_Table_2);
         onCreate(db);
     }
 
@@ -45,17 +81,43 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(Col_Username, inputAcc.getUsername().toLowerCase());
-        values.put(Col_Password, inputAcc.getPassword());
+        values.put(Col_Username_1, inputAcc.getUsername().toLowerCase());
+        values.put(Col_Password_1, inputAcc.getPassword());
 
-        db.insert(DB_Table, null, values);
+        db.insert(DB_Table_1, null, values);
 
         db.close();
     }
 
+    public void addItem(itemModel input){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(Col_name_2, input.getItemName());
+        values.put(Col_price_2, input.getPrice());
+
+        db.insert(DB_Table_2, null, values);
+
+        db.close();
+    }
+    public void addOrder(orderModel input){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(Col_userid_3, input.getUserID());
+        values.put(Col_order_3, input.getOrderList().toString());
+        values.put(Col_total_3, input.getTotal());
+
+        db.insert(DB_Table_3, null, values);
+
+        db.close();
+    }
+
+
+
     public List<User> getUsers(){
         List<User> users = new ArrayList<>();
-        String query = "SELECT * FROM " + DB_Table +" ORDER BY "+ Col_ID +" DESC";
+        String query = "SELECT * FROM " + DB_Table_1 +" ORDER BY "+ Col_ID +" DESC";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query,null);
 
@@ -78,12 +140,12 @@ public class DBHandler extends SQLiteOpenHelper {
         };
         SQLiteDatabase db = this.getReadableDatabase();
         // selection criteria
-        String selection = Col_Username + " = ?";
+        String selection = Col_Username_1 + " = ?";
         // selection argument
         String[] selectionArgs = {nameInput.toLowerCase()};
         // query user table with condition
 
-        Cursor cursor = db.query(DB_Table, //Table to query
+        Cursor cursor = db.query(DB_Table_1, //Table to query
                 columns,                    //columns to return
                 selection,                  //columns for the WHERE clause
                 selectionArgs,              //The values for the WHERE clause
@@ -98,12 +160,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         return false;
     }
-    /**
-     * This method to check user exist or not
-     *
-     * @param acc
-     * @return true/false
-     */
+
     public boolean checkAcc(User acc) {
         // array of columns to fetch
         String[] columns = {
@@ -111,12 +168,12 @@ public class DBHandler extends SQLiteOpenHelper {
         };
         SQLiteDatabase db = this.getReadableDatabase();
         // selection criteria
-        String selection = Col_Username + " = ?" + " AND " + Col_Password + " = ?";
+        String selection = Col_Username_1 + " = ?" + " AND " + Col_Password_1 + " = ?";
         // selection arguments
         String[] selectionArgs = {acc.getUsername().toLowerCase(), acc.getPassword()};
         // query user table with conditions
 
-        Cursor cursor = db.query(DB_Table, //Table to query
+        Cursor cursor = db.query(DB_Table_1, //Table to query
                 columns,                    //columns to return
                 selection,                  //columns for the WHERE clause
                 selectionArgs,              //The values for the WHERE clause

@@ -123,7 +123,11 @@ public class SecondFragment extends Fragment {
             if (db.checkUser(userName)){
                 if(db.checkAcc(reg)){
                     Toast.makeText(getActivity(), "Successful login", Toast.LENGTH_SHORT).show();
-                    NavHostFragment.findNavController(SecondFragment.this).navigate(R.id.action_secondFragment_to_fourthFragment);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("username", userName);
+
+
+                    NavHostFragment.findNavController(SecondFragment.this).navigate(R.id.action_secondFragment_to_fourthFragment,bundle);
                   //  Thread.sleep(5000);
                 } else {
                     Toast.makeText(getActivity(), "Invalid Password", Toast.LENGTH_SHORT).show();
@@ -134,7 +138,7 @@ public class SecondFragment extends Fragment {
                 userInp.setError("Invalid Username");
             }
 
-            //new Thread(reg).start();  //starting the registration thread.
+
         }else{
             Toast.makeText(getActivity(), "Invalid form input", Toast.LENGTH_SHORT).show();
             passInp.setError("Please enter text");

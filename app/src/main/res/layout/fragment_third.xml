@@ -103,7 +103,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/back"
-        card_view:srcCompat="@android:drawable/ic_menu_revert" />
+    />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

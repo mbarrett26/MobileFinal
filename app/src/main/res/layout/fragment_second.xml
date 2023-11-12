@@ -101,7 +101,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/back"
-        card_view:srcCompat="@android:drawable/ic_menu_revert" />
+       />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
