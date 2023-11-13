@@ -102,30 +102,17 @@ public class ThirdFragment extends Fragment {
         userInp=binding.edUsername;
         passInp=binding.edPassword;
 
-
-
-        /*
         binding.btnReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavHostFragment.findNavController(ThirdFragment.this).navigate(R.id.action_thirdFragment_to_firstFragment);
-            }
-        }); */
-
-        binding.btnReturn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //CALL DB AND REGISTER :)
                NavHostFragment.findNavController(ThirdFragment.this).navigate(R.id.action_thirdFragment_to_firstFragment);
             }
         });
         binding.btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //CALL DB AND REGISTER :)
-              //  Toast.makeText(v.getContext(), "Hello", Toast.LENGTH_SHORT).show();
                 registerUser();
-                //NavHostFragment.findNavController(ThirdFragment.this).navigate(R.id.action_thirdFragment_to_firstFragment);
+                NavHostFragment.findNavController(ThirdFragment.this).navigate(R.id.action_thirdFragment_to_firstFragment);
             }
         });
     }
