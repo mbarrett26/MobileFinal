@@ -11,7 +11,8 @@ import androidx.core.view.MenuProvider;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -42,6 +43,7 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
     NavigationView navigationView;
     List<itemModel> items;
     Adapter adapter;
+    String output;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -107,7 +109,7 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
 
 
         items = dbHandler.getItems();
-        binding.menuItemList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.menuItemList.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         adapter = new Adapter(getActivity(), items);
         binding.menuItemList.setAdapter(adapter);
         
@@ -151,9 +153,13 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
                 Toast.makeText(getActivity(), "Locator Button Clicked", Toast.LENGTH_SHORT).show();
                 //Do Something
 
-            case R.id.itemOrders:
+            case R.id.userOrders:
                 Toast.makeText(getActivity(), "Order Button Clicked", Toast.LENGTH_SHORT).show();
                 //Do Something
+
+            case R.id.userLogout:
+                Toast.makeText(getActivity(), output + " has Logged out", Toast.LENGTH_SHORT).show();
+                NavHostFragment.findNavController(FourthFragment.this).navigate(R.id.action_fourthFragment_to_firstFragment);
         }
 
         return false;
@@ -161,7 +167,7 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        String output = getArguments().getString("username");
-        Toast.makeText(getActivity(), output+" logged in", Toast.LENGTH_SHORT).show();
+        output = getArguments().getString("username");
+        Toast.makeText(getActivity(), "Logged In as: " + output, Toast.LENGTH_SHORT).show();
     }
 }

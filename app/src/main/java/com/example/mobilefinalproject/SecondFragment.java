@@ -122,7 +122,7 @@ public class SecondFragment extends Fragment {
 
             if (db.checkUser(userName)){
                 if(db.checkAcc(reg)){
-                    Toast.makeText(getActivity(), "Successful login", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "Successful login", Toast.LENGTH_SHORT).show();
                     Bundle bundle = new Bundle();
                     bundle.putString("username", userName);
 

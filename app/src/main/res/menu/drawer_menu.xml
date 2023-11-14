@@ -10,14 +10,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:icon="@drawable/location"
-            android:title="Restaurant Locator"
-            android:drawablePadding="15dp"/>
+            android:title="Restaurant Locator"/>
         <item
-            android:id="@+id/itemOrders"
+            android:id="@+id/userOrders"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:icon="@drawable/orders"
-            android:title="Orders"
-            android:drawablePadding="15dp"/>
+            android:title="Orders" />
+        <item
+            android:id="@+id/userLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/logout"
+            android:title="Logout" />
     </group>
 </menu>
