@@ -11,8 +11,8 @@ public class itemModel {
     }
 
     public itemModel(String itemInput, double priceInput){
-        this.itemName=itemInput;
-        this.price=priceInput;
+        this.itemName = itemInput;
+        this.price = priceInput;
     }
 
     public long getId() {

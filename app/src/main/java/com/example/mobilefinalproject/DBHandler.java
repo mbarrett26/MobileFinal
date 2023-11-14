@@ -113,7 +113,23 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public List<itemModel> getItems(){
+        List<itemModel> items = new ArrayList<>();
+        String query = "SELECT * FROM " + DB_Table_2 +" ORDER BY "+ Col_ID +" DESC";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query,null);
 
+        if(cursor.moveToFirst()){
+            do{
+                itemModel item = new itemModel();
+                item.setId(Long.parseLong(cursor.getString(0)));
+                item.setItemName(cursor.getString(1));
+                item.setPrice(Double.parseDouble(cursor.getString(2)));
+                items.add(item);
+            }while (cursor.moveToNext());
+        }
+        return items;
+    }
 
     public List<User> getUsers(){
         List<User> users = new ArrayList<>();

@@ -26,12 +26,12 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             app:headerLayout="@layout/drawer_header"
-            app:menu="@menu/drawer_menu">
+            app:menu="@menu/drawer_menu" />
 
-        </com.google.android.material.navigation.NavigationView>
     </androidx.drawerlayout.widget.DrawerLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/menuItemList"
         android:layout_width="match_parent"
         android:layout_height="650dp"
         android:layout_marginStart="8dp"

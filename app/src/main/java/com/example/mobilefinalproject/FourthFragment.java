@@ -11,6 +11,7 @@ import androidx.core.view.MenuProvider;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,8 +23,9 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.mobilefinalproject.databinding.FragmentFourthBinding;
-import com.example.mobilefinalproject.databinding.FragmentSecondBinding;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,10 +35,13 @@ import com.google.android.material.navigation.NavigationView;
 public class FourthFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
 
     private FragmentFourthBinding binding;
+    DBHandler dbHandler;
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerToggle;
     Toolbar toolbar;
     NavigationView navigationView;
+    List<itemModel> items;
+    Adapter adapter;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -76,6 +81,7 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        dbHandler = new DBHandler(getActivity());
     }
 
     @Override
@@ -98,6 +104,12 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
         navigationView.setNavigationItemSelectedListener(this);
 
         setToolbarMenu();
+
+
+        items = dbHandler.getItems();
+        binding.menuItemList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new Adapter(getActivity(), items);
+        binding.menuItemList.setAdapter(adapter);
         
         return binding.getRoot();
     }
@@ -135,8 +147,12 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
-            case R.id.test:
-                Toast.makeText(getActivity(), "Test Button Clicked", Toast.LENGTH_SHORT).show();
+            case R.id.itemLocator:
+                Toast.makeText(getActivity(), "Locator Button Clicked", Toast.LENGTH_SHORT).show();
+                //Do Something
+
+            case R.id.itemOrders:
+                Toast.makeText(getActivity(), "Order Button Clicked", Toast.LENGTH_SHORT).show();
                 //Do Something
         }
 
