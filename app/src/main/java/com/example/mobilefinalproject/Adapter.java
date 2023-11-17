@@ -1,6 +1,8 @@
 package com.example.mobilefinalproject;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +31,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull Adapter.MyViewHolder holder, int position) {
+        byte[] imageByte = items.get(position).getImage();
+        Bitmap bitmap = BitmapFactory.decodeByteArray(imageByte, 0, imageByte .length);
+
         String name = items.get(position).getItemName();
         String price = "$" + items.get(position).getPrice();
 
         holder.nameOutput.setText(name);
         holder.priceOutput.setText(price);
+        holder.image.setImageBitmap(bitmap);
     }
 
     @Override

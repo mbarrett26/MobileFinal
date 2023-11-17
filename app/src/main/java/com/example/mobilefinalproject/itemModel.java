@@ -1,18 +1,24 @@
 package com.example.mobilefinalproject;
 
+import android.graphics.Bitmap;
+
+import java.sql.Blob;
+
 public class itemModel {
 
     private long id;
     private String itemName;
     private double price;
+    private byte[] image;
 
     public itemModel(){
 
     }
 
-    public itemModel(String itemInput, double priceInput){
+    public itemModel(String itemInput, double priceInput, byte[] image){
         this.itemName = itemInput;
         this.price = priceInput;
+        this.image = image;
     }
 
     public long getId() {
@@ -37,5 +43,13 @@ public class itemModel {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 }

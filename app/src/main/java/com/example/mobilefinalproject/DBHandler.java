@@ -26,7 +26,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private static final String DB_Table_2 = "resturantItemData";
     private static final String Col_name_2 = "itemname";
-    private static final String Col_price_2 = "price"; // could add image?
+    private static final String Col_price_2 = "price";
+    private static final String Col_image_2 = "image";
 
     private static final String DB_Table_3 = "orderData";
     private static final String Col_userid_3 = "userid";
@@ -45,14 +46,16 @@ public class DBHandler extends SQLiteOpenHelper {
                 + Col_Username_1 + " TEXT, "
                 + Col_Password_1 + " TEXT " +
                 ")";
-
         db.execSQL(user_query);
+
         user_query = "CREATE TABLE " + DB_Table_2 + " ("
                 + Col_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + Col_name_2 + " TEXT, "
-                + Col_price_2 + " TEXT " +
+                + Col_price_2 + " TEXT, "
+                + Col_image_2 + " TEXT " +
                 ")";
         db.execSQL(user_query);
+
         user_query = "CREATE TABLE " + DB_Table_3 + " ("
                 + Col_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + Col_userid_3 + " TEXT, "
@@ -60,14 +63,13 @@ public class DBHandler extends SQLiteOpenHelper {
                 + Col_total_3 + " TEXT " +
                 ")";
         db.execSQL(user_query);
+
         user_query = "CREATE TABLE " + DB_Table_4 + " ("
                 + Col_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + Col_userid_4 + " TEXT, "
                 + Col_reviewdata_4 + " TEXT " +
                 ")";
         db.execSQL(user_query);
-
-
     }
 
     @Override
@@ -95,6 +97,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         values.put(Col_name_2, input.getItemName());
         values.put(Col_price_2, input.getPrice());
+        values.put(Col_image_2, input.getImage());
 
         db.insert(DB_Table_2, null, values);
 
@@ -125,6 +128,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 item.setId(Long.parseLong(cursor.getString(0)));
                 item.setItemName(cursor.getString(1));
                 item.setPrice(Double.parseDouble(cursor.getString(2)));
+                item.setImage(cursor.getBlob(3));
                 items.add(item);
             }while (cursor.moveToNext());
         }
