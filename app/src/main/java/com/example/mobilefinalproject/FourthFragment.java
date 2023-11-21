@@ -1,5 +1,8 @@
 package com.example.mobilefinalproject;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,6 +26,8 @@ import android.widget.Toast;
 import com.example.mobilefinalproject.databinding.FragmentFourthBinding;
 import com.google.android.material.navigation.NavigationView;
 
+import java.io.ByteArrayOutputStream;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +42,8 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
     Toolbar toolbar;
     NavigationView navigationView;
     String output;
+    FifthFragment ldf;
+    Bundle bundle;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -76,6 +83,29 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        bundle = new Bundle();
+
+        /*
+        DBHandler db = new DBHandler(getActivity());
+        byte[] burger = bitmapToByte(getResources().getDrawable(R.drawable.burger));
+        db.addItem(new itemModel("Burger", 5.99, burger, "Very Boorger Nom Nom", 500, "burger"));
+        db.addItem(new itemModel("Cheese Burger", 5.99, burger, "Very Boorger Nom Nom", 500, "burger"));
+        db.addItem(new itemModel("Bacon Burger", 5.99, burger, "Very Boorger Nom Nom", 500, "burger"));
+        db.addItem(new itemModel("Bacon Cheese Burger", 5.99, burger, "Very Boorger Nom Nom", 500, "burger"));
+        db.addItem(new itemModel("Fries", 2.99, burger, "No boorger :(", 360, "nope"));
+        db.addItem(new itemModel("Pizza", 15.99, burger, "No boorger :(", 360, "nope"));
+        db.addItem(new itemModel("Chicken", 25.99, burger, "No boorger :(", 360, "nope"));
+        */
+    }
+
+    public byte[] bitmapToByte(Drawable image){
+        Bitmap bitmap = ((BitmapDrawable)image).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] bitmapdata = stream.toByteArray();
+
+        return bitmapdata;
     }
 
     @Override
@@ -155,7 +185,16 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
         binding.imageView7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavHostFragment.findNavController(FourthFragment.this).navigate(R.id.action_fourthFragment_to_fifthFragment);
+                bundle.putString("category", "burger");
+                NavHostFragment.findNavController(FourthFragment.this).navigate(R.id.action_fourthFragment_to_fifthFragment, bundle);
+            }
+        });
+
+        binding.imageView11.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bundle.putString("category", "nope");
+                NavHostFragment.findNavController(FourthFragment.this).navigate(R.id.action_fourthFragment_to_fifthFragment, bundle);
             }
         });
     }

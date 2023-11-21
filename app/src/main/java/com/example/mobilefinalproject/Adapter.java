@@ -12,15 +12,27 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
     private Context context;
     private List<itemModel> items;
+    private List<itemModel> filteredItems;
 
-    Adapter(Context context,List<itemModel> items){
+    Adapter(Context context,List<itemModel> items, String category){
         this.context = context;
         this.items = items;
+        filterItemsByCategory(category);
+    }
+
+    private void filterItemsByCategory(String category) {
+        filteredItems = new ArrayList<>();
+        for (itemModel item : items) {
+            if (item.getCategory().equals(category)) {
+                filteredItems.add(item);
+            }
+        }
     }
 
     @NonNull
@@ -31,31 +43,35 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull Adapter.MyViewHolder holder, int position) {
-        byte[] imageByte = items.get(position).getImage();
+        String name = filteredItems.get(position).getItemName();
+        String price = "" + filteredItems.get(position).getPrice();
+        byte[] imageByte = filteredItems.get(position).getImage();
         Bitmap bitmap = BitmapFactory.decodeByteArray(imageByte, 0, imageByte .length);
-
-        String name = items.get(position).getItemName();
-        String price = "$" + items.get(position).getPrice();
+        String description = filteredItems.get(position).getDescription();
+        String calories = "" + filteredItems.get(position).getCalories();
 
         holder.nameOutput.setText(name);
-        holder.priceOutput.setText(price);
+        holder.descriptionOutput.setText(description);
+        holder.priceCalorieOutput.setText(String.format("$%s | %s Cals", price, calories));
         holder.image.setImageBitmap(bitmap);
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return filteredItems.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
         TextView nameOutput;
-        TextView priceOutput;
+        TextView descriptionOutput;
+        TextView priceCalorieOutput;
         ImageView image;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             nameOutput = itemView.findViewById(R.id.itemName);
-            priceOutput = itemView.findViewById(R.id.itemPrice);
+            descriptionOutput = itemView.findViewById(R.id.itemDescription);
+            priceCalorieOutput = itemView.findViewById(R.id.itemPriceCalories);
             image = itemView.findViewById(R.id.itemImage);
         }
     }

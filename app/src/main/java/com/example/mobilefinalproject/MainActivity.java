@@ -18,24 +18,12 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DBHandler db = new DBHandler(this);
 
-        byte[] burger = bitmapToByte(getResources().getDrawable(R.drawable.burger));
-        /*
-        db.addItem(new itemModel("Burger", 5.99, burger));
-        db.addItem(new itemModel("Fries", 2.99, burger));
-        db.addItem(new itemModel("Pizza", 15.99, burger));
-        db.addItem(new itemModel("Chicken", 25.99, burger));
-        */
+
+
+
     }
 
-    public byte[] bitmapToByte(Drawable image){
-        Bitmap bitmap = ((BitmapDrawable)image).getBitmap();
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] bitmapdata = stream.toByteArray();
 
-        return bitmapdata;
-    }
 
 }

@@ -10,15 +10,21 @@ public class itemModel {
     private String itemName;
     private double price;
     private byte[] image;
+    private String description;
+    private int calories;
+    private String category;
 
     public itemModel(){
 
     }
 
-    public itemModel(String itemInput, double priceInput, byte[] image){
+    public itemModel(String itemInput, double priceInput, byte[] image, String description, int calories, String category){
         this.itemName = itemInput;
         this.price = priceInput;
         this.image = image;
+        this.description = description;
+        this.calories = calories;
+        this.category = category;
     }
 
     public long getId() {
@@ -51,5 +57,29 @@ public class itemModel {
 
     public void setImage(byte[] image) {
         this.image = image;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getCalories() {
+        return calories;
+    }
+
+    public void setCalories(int calories) {
+        this.calories = calories;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

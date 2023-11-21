@@ -43,6 +43,7 @@ public class FifthFragment extends Fragment implements NavigationView.OnNavigati
     NavigationView navigationView;
     List<itemModel> items;
     Adapter adapter;
+    String category;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -83,6 +84,7 @@ public class FifthFragment extends Fragment implements NavigationView.OnNavigati
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         dbHandler = new DBHandler(getActivity());
+        category = getArguments().getString("category");
     }
 
     @Override
@@ -108,7 +110,7 @@ public class FifthFragment extends Fragment implements NavigationView.OnNavigati
 
         items = dbHandler.getItems();
         binding.menuList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new Adapter(getActivity(), items);
+        adapter = new Adapter(getActivity(), items, category);
         binding.menuList.setAdapter(adapter);
 
         return binding.getRoot();

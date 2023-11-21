@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp">
 
@@ -23,29 +23,42 @@
         android:text="Menu Item"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:textColor="@color/Brown"
         app:layout_constraintStart_toEndOf="@+id/itemImage"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/itemPrice"
+        android:id="@+id/itemPriceCalories"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:text="$0.00"
-        android:textSize="15sp"
-        android:textStyle="italic|bold"
+        android:layout_marginTop="60dp"
+        android:text="$0.00 | 000 Cals"
+        android:textSize="17sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/itemImage"
         app:layout_constraintTop_toBottomOf="@+id/itemName" />
 
-    <Button
+    <ImageButton
         android:id="@+id/addItem"
-        android:layout_width="75dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="@color/OrangeRed"
-        android:text="Add"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:background="@drawable/round"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/add"
+        app:layout_constraintBottom_toBottomOf="@+id/itemPriceCalories"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/itemDescription"
+        android:layout_width="257dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/itemImage"
-        app:layout_constraintTop_toBottomOf="@+id/itemPrice" />
+        app:layout_constraintTop_toBottomOf="@+id/itemName" />
 </androidx.constraintlayout.widget.ConstraintLayout>

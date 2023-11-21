@@ -28,6 +28,9 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String Col_name_2 = "itemname";
     private static final String Col_price_2 = "price";
     private static final String Col_image_2 = "image";
+    private static final String Col_description_2 = "description";
+    private static final String Col_calories_2 = "calories";
+    private static final String Col_category_2 = "category";
 
     private static final String DB_Table_3 = "orderData";
     private static final String Col_userid_3 = "userid";
@@ -52,7 +55,10 @@ public class DBHandler extends SQLiteOpenHelper {
                 + Col_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + Col_name_2 + " TEXT, "
                 + Col_price_2 + " TEXT, "
-                + Col_image_2 + " TEXT " +
+                + Col_image_2 + " TEXT, "
+                + Col_description_2 + " TEXT, "
+                + Col_calories_2 + " TEXT, "
+                + Col_category_2 + " TEXT " +
                 ")";
         db.execSQL(user_query);
 
@@ -98,6 +104,9 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(Col_name_2, input.getItemName());
         values.put(Col_price_2, input.getPrice());
         values.put(Col_image_2, input.getImage());
+        values.put(Col_description_2, input.getDescription());
+        values.put(Col_calories_2, input.getCalories());
+        values.put(Col_category_2, input.getCategory());
 
         db.insert(DB_Table_2, null, values);
 
@@ -129,6 +138,9 @@ public class DBHandler extends SQLiteOpenHelper {
                 item.setItemName(cursor.getString(1));
                 item.setPrice(Double.parseDouble(cursor.getString(2)));
                 item.setImage(cursor.getBlob(3));
+                item.setDescription(cursor.getString(4));
+                item.setCalories(Integer.parseInt(cursor.getString(5)));
+                item.setCategory(cursor.getString(6));
                 items.add(item);
             }while (cursor.moveToNext());
         }
