@@ -1,5 +1,8 @@
 package com.example.mobilefinalproject;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -33,7 +36,7 @@ import java.util.List;
  * Use the {@link FifthFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FifthFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
+public class FifthFragment extends Fragment {
 
     private FragmentFifthBinding binding;
     DBHandler dbHandler;
@@ -44,6 +47,8 @@ public class FifthFragment extends Fragment implements NavigationView.OnNavigati
     List<itemModel> items;
     Adapter adapter;
     String category;
+    String username;
+    Bundle bundle;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -84,7 +89,9 @@ public class FifthFragment extends Fragment implements NavigationView.OnNavigati
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         dbHandler = new DBHandler(getActivity());
+        bundle = new Bundle();
         category = getArguments().getString("category");
+        username = getArguments().getString("username");
     }
 
     @Override
@@ -95,16 +102,15 @@ public class FifthFragment extends Fragment implements NavigationView.OnNavigati
 
         toolbar = binding.menuBarMenu.toolbar;
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        if(((AppCompatActivity)getActivity()).getSupportActionBar()!=null){
+            Drawable drawable= getResources().getDrawable(R.drawable.back);
+            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+            Drawable newdrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 25, 25, true));
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(newdrawable);
+        }
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("");
 
-        drawerLayout = binding.drawerMenu;
-        drawerToggle = new ActionBarDrawerToggle(getActivity(),drawerLayout,toolbar,R.string.open_drawer,R.string.close_drawer);
-        drawerLayout.addDrawerListener(drawerToggle);
-        drawerToggle.setDrawerIndicatorEnabled(true);
-        drawerToggle.syncState();
-
-        navigationView = binding.navigationViewMenu;
-        navigationView.setNavigationItemSelectedListener(this);
 
         setToolbarMenu();
 
@@ -112,6 +118,9 @@ public class FifthFragment extends Fragment implements NavigationView.OnNavigati
         binding.menuList.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new Adapter(getActivity(), items, category);
         binding.menuList.setAdapter(adapter);
+
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.item_spacing); // Define your spacing in pixels
+        binding.menuList.addItemDecoration(new itemDecoration(spacingInPixels));
 
         return binding.getRoot();
     }
@@ -133,35 +142,23 @@ public class FifthFragment extends Fragment implements NavigationView.OnNavigati
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()){
+                    case android.R.id.home:
+                        //bundle.putString("username", username);
+                        NavHostFragment.findNavController(FifthFragment.this).navigate(R.id.action_fifthFragment_to_fourthFragment, bundle);
+                        break;
+
                     case R.id.action_search:
                         //Do Something
+                        break;
 
                     case R.id.action_cart:
                         Toast.makeText(getActivity(), "Cart Button Clicked", Toast.LENGTH_SHORT).show();
                         //Do Something
+                        break;
                 }
 
                 return false;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()){
-            case R.id.itemLocator:
-                Toast.makeText(getActivity(), "Locator Button Clicked", Toast.LENGTH_SHORT).show();
-                //Do Something
-
-            case R.id.userOrders:
-                Toast.makeText(getActivity(), "Order Button Clicked", Toast.LENGTH_SHORT).show();
-                //Do Something
-
-            case R.id.userLogout:
-                Toast.makeText(getActivity(),  " has Logged out", Toast.LENGTH_SHORT).show();
-                NavHostFragment.findNavController(FifthFragment.this).navigate(R.id.action_fourthFragment_to_firstFragment);
-        }
-
-        return false;
     }
 }

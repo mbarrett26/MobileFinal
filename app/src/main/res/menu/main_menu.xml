@@ -7,7 +7,8 @@
         android:icon="@android:drawable/ic_menu_search"
         android:title="Search"
         app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:anyDensity="true"/>
     <item
         android:id="@+id/action_cart"
         android:layout_width="wrap_content"
@@ -15,6 +16,7 @@
         android:actionLayout="@layout/cart_badge"
         android:icon="@drawable/cart"
         android:title="Cart"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:anyDensity="true"/>
 
 </menu>
