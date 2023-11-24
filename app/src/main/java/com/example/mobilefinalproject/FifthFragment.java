@@ -39,16 +39,18 @@ import java.util.List;
 public class FifthFragment extends Fragment {
 
     private FragmentFifthBinding binding;
-    DBHandler dbHandler;
-    DrawerLayout drawerLayout;
-    ActionBarDrawerToggle drawerToggle;
-    Toolbar toolbar;
-    NavigationView navigationView;
-    List<itemModel> items;
-    Adapter adapter;
-    String category;
-    String username;
-    Bundle bundle;
+    private DBHandler dbHandler;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
+    private Toolbar toolbar;
+    private NavigationView navigationView;
+    private List<itemModel> items;
+    private Adapter adapter;
+    private String category;
+    private String username;
+    private Bundle bundle;
+    private List<itemModel> cart;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -143,7 +145,7 @@ public class FifthFragment extends Fragment {
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()){
                     case android.R.id.home:
-                        //bundle.putString("username", username);
+                        //bundle.putString("cart", Adapter.cart);
                         NavHostFragment.findNavController(FifthFragment.this).navigate(R.id.action_fifthFragment_to_fourthFragment, bundle);
                         break;
 

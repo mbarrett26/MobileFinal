@@ -13,6 +13,7 @@ public class itemModel {
     private String description;
     private int calories;
     private String category;
+    private int quantity;
 
     public itemModel(){
 
@@ -81,5 +82,13 @@ public class itemModel {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

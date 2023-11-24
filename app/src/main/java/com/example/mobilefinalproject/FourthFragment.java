@@ -40,13 +40,14 @@ import java.util.List;
 public class FourthFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
 
     private FragmentFourthBinding binding;
-    DrawerLayout drawerLayout;
-    ActionBarDrawerToggle drawerToggle;
-    Toolbar toolbar;
-    NavigationView navigationView;
-    String output;
-    FifthFragment ldf;
-    Bundle bundle;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
+    private Toolbar toolbar;
+    private NavigationView navigationView;
+    private String output;
+    private FifthFragment ldf;
+    private Bundle bundle;
+    private List<itemModel> cart;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
