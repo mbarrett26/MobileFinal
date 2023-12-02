@@ -94,6 +94,7 @@ public class SecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         db = new DBHandler(getActivity());
+        //db.deleteDB();
         userInp=binding.edUsername;
         passInp=binding.edPassword;
         binding.btnReturn.setOnClickListener(new View.OnClickListener() {
@@ -125,9 +126,10 @@ public class SecondFragment extends Fragment {
                     //Toast.makeText(getActivity(), "Successful login", Toast.LENGTH_SHORT).show();
                     Bundle bundle = new Bundle();
                     bundle.putString("username", userName);
-
-
-                    NavHostFragment.findNavController(SecondFragment.this).navigate(R.id.action_secondFragment_to_fourthFragment,bundle);
+                    bundle.putLong("id",db.getUserID(userName));
+                    Toast.makeText(getActivity(), "ID: "+db.getUserID(userName), Toast.LENGTH_SHORT).show();
+                    
+                    NavHostFragment.findNavController(SecondFragment.this).navigate(R.id.second_to_review,bundle);
                   //  Thread.sleep(5000);
                 } else {
                     Toast.makeText(getActivity(), "Invalid Password", Toast.LENGTH_SHORT).show();

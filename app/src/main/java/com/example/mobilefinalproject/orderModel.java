@@ -8,16 +8,27 @@ public class orderModel {
     private long orderID;
 
     private long userID;
-    private JSONObject orderList;
+    private String orderList;
+
+    @Override
+    public String toString() {
+        return "orderModel{" +
+                "userID=" + userID +
+                ", orderList='" + orderList + '\'' +
+                ", total=" + total +
+                '}';
+    }
+
     private double total;
 
     public orderModel(){
 
     }
 
-    public orderModel(JSONObject listInput, double totalInput){
+    public orderModel(String listInput, double totalInput, long idInput){
         this.orderList=listInput;
         this.total=totalInput;
+        this.userID = idInput;
     }
 
     public long getUserID() {
@@ -36,11 +47,11 @@ public class orderModel {
         this.orderID = orderID;
     }
 
-    public JSONObject getOrderList() {
+    public String getOrderList() {
         return orderList;
     }
 
-    public void setOrderList(JSONObject orderList) {
+    public void setOrderList(String orderList) {
         this.orderList = orderList;
     }
 

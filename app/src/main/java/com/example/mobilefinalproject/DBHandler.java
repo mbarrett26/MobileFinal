@@ -40,6 +40,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private static final String DB_Table_4 = "reviewData";
     private static final String Col_userid_4 = "userid";
+    private static final String Col_rating_4 = "rating";
     private static final String Col_reviewdata_4 = "reviewText";
 
     @Override
@@ -72,7 +73,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
         user_query = "CREATE TABLE " + DB_Table_4 + " ("
                 + Col_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + Col_userid_4 + " TEXT, "
+                + Col_userid_4 + " INTEGER, "
+                + Col_rating_4 + " INTEGER, "
                 + Col_reviewdata_4 + " TEXT " +
                 ")";
         db.execSQL(user_query);
@@ -82,6 +84,17 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + DB_Table_1);
         db.execSQL("DROP TABLE IF EXISTS " + DB_Table_2);
+        db.execSQL("DROP TABLE IF EXISTS " + DB_Table_3);
+        db.execSQL("DROP TABLE IF EXISTS " + DB_Table_4);
+        onCreate(db);
+    }
+
+    public void deleteDB(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + DB_Table_1);
+        db.execSQL("DROP TABLE IF EXISTS " + DB_Table_2);
+        db.execSQL("DROP TABLE IF EXISTS " + DB_Table_3);
+        db.execSQL("DROP TABLE IF EXISTS " + DB_Table_4);
         onCreate(db);
     }
 
@@ -95,6 +108,55 @@ public class DBHandler extends SQLiteOpenHelper {
         db.insert(DB_Table_1, null, values);
 
         db.close();
+    }
+
+    public void addReview(Long userId,int rating ,String reviewText){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(Col_userid_4, userId);
+        values.put(Col_rating_4,rating);
+        values.put(Col_reviewdata_4, reviewText);
+
+        db.insert(DB_Table_4, null, values);
+
+        db.close();
+    }
+
+    public List<String> getReview(int rating){
+        List<String> reviews = new ArrayList<>();
+
+        // array of columns to fetch
+        String[] columns = {
+                Col_userid_4,Col_reviewdata_4
+        };
+        SQLiteDatabase db = this.getReadableDatabase();
+        // selection criteria
+        String selection = Col_rating_4 + " = ?";
+        // selection arguments
+        String[] selectionArgs = {String.valueOf(rating)};
+        // query user table with conditions
+
+        Cursor cursor = db.query(DB_Table_4, //Table to query
+                columns,                    //columns to return
+                selection,                  //columns for the WHERE clause
+                selectionArgs,              //The values for the WHERE clause
+                null,                       //group the rows
+                null,                       //filter by row groups
+                null);                      //The sort order
+        if(cursor.moveToFirst()){
+            do{
+                reviews.add(cursor.getString(0));
+                reviews.add(cursor.getString(1));
+
+            }while (cursor.moveToNext());
+        }
+
+
+        cursor.close();
+        db.close();
+
+        return reviews;
     }
 
     public void addItem(itemModel input){
@@ -117,12 +179,50 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         values.put(Col_userid_3, input.getUserID());
-        values.put(Col_order_3, input.getOrderList().toString());
+        values.put(Col_order_3, input.getOrderList());
         values.put(Col_total_3, input.getTotal());
 
         db.insert(DB_Table_3, null, values);
 
         db.close();
+    }
+
+    public List<orderModel> getOrders(long id){
+        List<orderModel> orders = new ArrayList<>();
+
+        // array of columns to fetch
+        String[] columns = {
+                Col_order_3,Col_total_3
+        };
+        SQLiteDatabase db = this.getReadableDatabase();
+        // selection criteria
+        String selection = Col_userid_3 + " = ?";
+        // selection arguments
+        String[] selectionArgs = {String.valueOf(id)};
+        // query user table with conditions
+
+        Cursor cursor = db.query(DB_Table_3, //Table to query
+                columns,                    //columns to return
+                selection,                  //columns for the WHERE clause
+                selectionArgs,              //The values for the WHERE clause
+                null,                       //group the rows
+                null,                       //filter by row groups
+                null);                      //The sort order
+        if(cursor.moveToFirst()){
+            do{
+                orderModel order = new orderModel();
+                order.setOrderList(cursor.getString(0));
+                order.setTotal(Double.parseDouble(cursor.getString(1)));
+                orders.add(order);
+
+            }while (cursor.moveToNext());
+        }
+
+
+        cursor.close();
+        db.close();
+
+        return orders;
     }
 
     public List<itemModel> getItems(){
@@ -165,6 +265,60 @@ public class DBHandler extends SQLiteOpenHelper {
         return users;
     }
 
+    public long getUserID(String nameInput){
+
+        long userID =0 ;
+
+        String[] columns = {
+                Col_ID
+        };
+        SQLiteDatabase db = this.getReadableDatabase();
+        // selection criteria
+        String selection = Col_Username_1 + " = ?";
+        // selection argument
+        String[] selectionArgs = {nameInput.toLowerCase()};
+        // query user table with condition
+
+        Cursor cursor = db.query(DB_Table_1, //Table to query
+                columns,                    //columns to return
+                selection,                  //columns for the WHERE clause
+                selectionArgs,              //The values for the WHERE clause
+                null,                       //group the rows
+                null,                      //filter by row groups
+                null);                      //The sort order
+
+        if(cursor.moveToFirst()){
+            userID = Long.parseLong(cursor.getString(0));
+        }
+        cursor.close();
+        db.close();
+
+        return userID;
+    }
+
+    public boolean checkOrder(long userID){
+        String[] columns = {
+                Col_userid_3
+        };
+        SQLiteDatabase db = this.getReadableDatabase();
+        // selection criteria
+        String selection = Col_userid_3 + " = ?";
+        // selection argument
+        String[] selectionArgs = {String.valueOf(userID)};
+        // query user table with condition
+
+        Cursor cursor = db.query(DB_Table_3, //Table to query
+                columns,                    //columns to return
+                selection,                  //columns for the WHERE clause
+                selectionArgs,              //The values for the WHERE clause
+                null,                       //group the rows
+                null,                      //filter by row groups
+                null);                      //The sort order
+        int cursorCount = cursor.getCount();
+        cursor.close();
+        db.close();
+        return cursorCount > 0;
+    }
     public boolean checkUser(String nameInput) {
         // array of columns to fetch
         String[] columns = {
