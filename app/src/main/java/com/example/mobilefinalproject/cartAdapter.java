@@ -37,14 +37,14 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.MyViewHolder> 
         SharedPreferences sharedPreferences = context.getSharedPreferences(CART_PREFS, Context.MODE_PRIVATE);
         String cartItemsJson = sharedPreferences.getString(CART_ITEMS_KEY, "");
 
-        if (!cartItemsJson.isEmpty()) {
+        if (!cartItemsJson.isEmpty() && cartItemsJson.trim().length() > 4) {
             Gson gson = new Gson();
             cart = gson.fromJson(cartItemsJson, new TypeToken<List<itemModel>>(){}.getType());
         } else {
             cart = new ArrayList<>();
         }
 
-        Log.d("SharedPreferences","The Cart" + cart.get(0).getCalories());
+        //Log.d("SharedPreferences","The Cart" + cart.get(0).getCalories());
     }
 
     public double calculateTotalPrice() {
@@ -64,14 +64,13 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         String name = cart.get(position).getItemName();
-        String price = "$" + cart.get(position).getPrice();
         String quantity = "" + cart.get(position).getQuantity();
         byte[] imageByte = cart.get(position).getImage();
         Bitmap bitmap = BitmapFactory.decodeByteArray(imageByte, 0, imageByte .length);
 
         holder.image.setImageBitmap(bitmap);
         holder.itemName.setText(name);
-        holder.itemPrice.setText(price);
+        holder.itemPrice.setText(String.format("%.2f", cart.get(position).getPrice() * cart.get(position).getQuantity()));
         holder.itemQuantity.setText(quantity);
 
         int index = holder.getAdapterPosition();
@@ -83,26 +82,32 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.MyViewHolder> 
 
                 String quantity = "" + cart.get(index).getQuantity();
                 holder.itemQuantity.setText(quantity);
+                holder.itemPrice.setText(String.format("%.2f", cart.get(index).getPrice() * cart.get(index).getQuantity()));
                 notifyQuantityChanged();
+                saveCartToSharedPreferences();
             }
         });
 
         holder.minusQuantity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int currentQuantity = cart.get(index).getQuantity();
+                if (index != RecyclerView.NO_POSITION) {
+                    int currentQuantity = cart.get(index).getQuantity();
 
-                if (currentQuantity > 1) {
-                    int decrementQuantity = cart.get(index).getQuantity() - 1;
-                    cart.get(index).setQuantity(decrementQuantity);
-                }else {
-                    cart.remove(index);
-                    removeItem(index);
+                    if (currentQuantity > 1) {
+                        int decrementQuantity = cart.get(index).getQuantity() - 1;
+                        cart.get(index).setQuantity(decrementQuantity);
+                        holder.itemPrice.setText(String.format("%.2f", cart.get(index).getPrice() * cart.get(index).getQuantity()));
+
+                        String quantity = "" + cart.get(index).getQuantity();
+                        holder.itemQuantity.setText(quantity);
+                    } else {
+                        removeItem(index);
+                    }
+
+                    notifyQuantityChanged();
+                    saveCartToSharedPreferences();
                 }
-
-                String quantity = "" + cart.get(index).getQuantity();
-                holder.itemQuantity.setText(quantity);
-                notifyQuantityChanged();
             }
         });
     }
@@ -159,8 +164,25 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.MyViewHolder> 
     }
 
     public void removeItem(int position) {
-        cart.remove(position);
+        if (position >= 0 && position < cart.size()) {
+            cart.remove(position);
+            notifyDataSetChanged();
+        }
         notifyItemRemoved(position);
+
+    }
+
+    private void saveCartToSharedPreferences() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CART_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Gson gson = new Gson();
+        String cartItemsJson = gson.toJson(cart);
+
+        Log.d("SharedPreferences", "Saved JSON: " + cartItemsJson);
+
+        editor.putString(CART_ITEMS_KEY, cartItemsJson);
+        editor.apply();
     }
 
 }

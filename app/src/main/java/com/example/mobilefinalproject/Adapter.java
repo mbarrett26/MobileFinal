@@ -143,7 +143,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
 
         Log.d("SharedPreferences", "Retrieved JSON: " + cartItemsJson);
 
-        if (!cartItemsJson.isEmpty()) {
+        if (!cartItemsJson.isEmpty() && cartItemsJson.trim().length() > 4) {
             Gson gson = new Gson();
             cart = gson.fromJson(cartItemsJson, new TypeToken<List<itemModel>>(){}.getType());
             Log.d("SharedPreferences", "test: " + cart.get(0).getCalories());
@@ -152,7 +152,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
         }
     }
 
-    // Save cart to SharedPreferences
     private void saveCartToSharedPreferences() {
         SharedPreferences sharedPreferences = context.getSharedPreferences(CART_PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
