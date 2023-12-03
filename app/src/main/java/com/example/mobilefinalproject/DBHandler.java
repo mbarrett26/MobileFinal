@@ -123,14 +123,16 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public List<String> getReview(int rating){
-        List<String> reviews = new ArrayList<>();
+    public List<reviewModel> getReview(int rating){
+        List<reviewModel> reviews = new ArrayList<>();
 
         // array of columns to fetch
         String[] columns = {
-                Col_userid_4,Col_reviewdata_4
+                Col_userid_4,Col_rating_4,Col_reviewdata_4
         };
         SQLiteDatabase db = this.getReadableDatabase();
+
+
         // selection criteria
         String selection = Col_rating_4 + " = ?";
         // selection arguments
@@ -146,8 +148,13 @@ public class DBHandler extends SQLiteOpenHelper {
                 null);                      //The sort order
         if(cursor.moveToFirst()){
             do{
-                reviews.add(cursor.getString(0));
-                reviews.add(cursor.getString(1));
+                reviewModel revi = new reviewModel();
+
+                revi.setUsername(getUserName(cursor.getLong(0)));
+                revi.setRating(cursor.getInt(1));
+                revi.setReviewText(cursor.getString(2));
+
+                reviews.add(revi);
 
             }while (cursor.moveToNext());
         }
@@ -295,6 +302,37 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
 
         return userID;
+    }
+
+    public String getUserName(long idInput){
+
+        String userName = "";
+
+        String[] columns = {
+                Col_Username_1
+        };
+        SQLiteDatabase db = this.getReadableDatabase();
+        // selection criteria
+        String selection = Col_ID + " = ?";
+        // selection argument
+        String[] selectionArgs = {String.valueOf(idInput)};
+        // query user table with condition
+
+        Cursor cursor = db.query(DB_Table_1, //Table to query
+                columns,                    //columns to return
+                selection,                  //columns for the WHERE clause
+                selectionArgs,              //The values for the WHERE clause
+                null,                       //group the rows
+                null,                      //filter by row groups
+                null);                      //The sort order
+
+        if(cursor.moveToFirst()){
+            userName = cursor.getString(0);
+        }
+        cursor.close();
+        db.close();
+
+        return userName;
     }
 
     public boolean checkOrder(long userID){
