@@ -6,12 +6,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.MenuItemCompat;
 import androidx.core.view.MenuProvider;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.fragment.NavHostFragment;
@@ -23,34 +20,22 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
-import android.widget.Toast;
 
-import com.example.mobilefinalproject.databinding.FragmentFifthBinding;
-import com.google.android.material.navigation.NavigationView;
-
-import java.util.List;
+import com.example.mobilefinalproject.databinding.FragmentCartBinding;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link FifthFragment#newInstance} factory method to
+ * Use the {@link CartFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FifthFragment extends Fragment {
+public class CartFragment extends Fragment implements cartAdapter.QuantityChangeListener {
 
-    private FragmentFifthBinding binding;
-    private DBHandler dbHandler;
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
+    private FragmentCartBinding binding;
+    private cartAdapter adapter;
     private Toolbar toolbar;
-    private NavigationView navigationView;
-    private List<itemModel> items;
-    private Adapter adapter;
-    private String category;
-    private String username;
-    private Bundle bundle;
-    private List<itemModel> cart;
-
+    private double subtotalCalc = 0.00;
+    private double taxCalc = 0.00;
+    private double totalCalc = 0.00;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,7 +46,7 @@ public class FifthFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public FifthFragment() {
+    public CartFragment() {
         // Required empty public constructor
     }
 
@@ -71,11 +56,11 @@ public class FifthFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FifthFragment.
+     * @return A new instance of fragment CartFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static FifthFragment newInstance(String param1, String param2) {
-        FifthFragment fragment = new FifthFragment();
+    public static CartFragment newInstance(String param1, String param2) {
+        CartFragment fragment = new CartFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -90,19 +75,15 @@ public class FifthFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        dbHandler = new DBHandler(getActivity());
-        bundle = new Bundle();
-        category = getArguments().getString("category");
-        username = getArguments().getString("username");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentFifthBinding.inflate(getLayoutInflater());
+        binding = FragmentCartBinding.inflate(getLayoutInflater());
 
-        toolbar = binding.menuBarMenu.toolbar;
+        toolbar = binding.menuBarCart.toolbar;
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         if(((AppCompatActivity)getActivity()).getSupportActionBar()!=null){
             Drawable drawable= getResources().getDrawable(R.drawable.back);
@@ -116,15 +97,30 @@ public class FifthFragment extends Fragment {
 
         setToolbarMenu();
 
-        items = dbHandler.getItems();
-        binding.menuList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new Adapter(getActivity(), items, category);
-        binding.menuList.setAdapter(adapter);
+        binding.cartList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new cartAdapter(getActivity());
+        adapter.setQuantityChangeListener((cartAdapter.QuantityChangeListener) this);
+        binding.cartList.setAdapter(adapter);
 
-        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.item_spacing); // Define your spacing in pixels
-        binding.menuList.addItemDecoration(new itemDecoration(spacingInPixels));
+        subtotalCalc = adapter.calculateTotalPrice();
+        updatePrice();
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onQuantityChanged() {
+        subtotalCalc = adapter.calculateTotalPrice(); // Recalculate subtotal
+        updatePrice(); // Update prices
+    }
+
+    private void updatePrice() {
+        taxCalc = subtotalCalc * 0.13;
+        totalCalc = subtotalCalc + taxCalc;
+
+        binding.subtotal.setText(String.format("$%.2f", subtotalCalc));
+        binding.tax.setText(String.format("$%.2f", taxCalc));
+        binding.total.setText(String.format("$%.2f", totalCalc));
     }
 
     private void setToolbarMenu() {
@@ -132,35 +128,22 @@ public class FifthFragment extends Fragment {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
                 menuInflater.inflate(R.menu.main_menu, menu);
+                MenuItem searchView = menu.findItem(R.id.action_search);
+                MenuItem cart = menu.findItem(R.id.action_cart);
 
-                MenuItem menuItem = menu.findItem(R.id.action_search);
-                SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
-                searchView.setIconified(false);
-                searchView.setIconifiedByDefault(false);
-                searchView.setQueryHint("Type something...");
-                searchView.clearFocus();
+                searchView.setVisible(false);
+                cart.setVisible(false);
             }
 
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                    case android.R.id.home:
-                        //bundle.putString("cart", Adapter.cart);
-                        NavHostFragment.findNavController(FifthFragment.this).navigate(R.id.action_fifthFragment_to_fourthFragment);
-                        break;
-
-                    case R.id.action_search:
-                        //Do Something
-                        break;
-
-                    case R.id.action_cart:
-                        NavHostFragment.findNavController(FifthFragment.this).navigate(R.id.action_fifthFragment_to_cartFragment);
-                        //Do Something
-                        break;
+                if (menuItem.getItemId() == android.R.id.home){
+                    NavHostFragment.findNavController(CartFragment.this).navigate(R.id.action_cartFragment_to_fourthFragment);
                 }
 
                 return false;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
+
 }

@@ -91,6 +91,7 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
         bundle = new Bundle();
 
 
+
         DBHandler db = new DBHandler(getActivity());
 
         byte[] burger = bitmapToByte(getResources().getDrawable(R.drawable.burger));
@@ -225,8 +226,7 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
                         break;
 
                     case R.id.action_cart:
-                        Toast.makeText(getActivity(), "Cart Button Clicked", Toast.LENGTH_SHORT).show();
-                        //Do Something
+                        NavHostFragment.findNavController(FourthFragment.this).navigate(R.id.action_fourthFragment_to_cartFragment);
                         break;
                 }
 
@@ -244,8 +244,12 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
                 break;
 
             case R.id.userOrders:
-                Toast.makeText(getActivity(), "Order Button Clicked", Toast.LENGTH_SHORT).show();
+                NavHostFragment.findNavController(FourthFragment.this).navigate(R.id.action_fourthFragment_to_orderViewFragment);
                 //Do Something
+                break;
+
+            case R.id.userReview:
+                NavHostFragment.findNavController(FourthFragment.this).navigate(R.id.action_fourthFragment_to_reviewFragment);
                 break;
 
             case R.id.userLogout:

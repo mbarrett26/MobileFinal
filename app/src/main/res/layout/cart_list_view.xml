@@ -15,7 +15,7 @@
         android:padding="5dp">
 
         <ImageView
-            android:id="@+id/itemImage"
+            android:id="@+id/cItemImage"
             android:layout_width="120dp"
             android:layout_height="120dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +23,7 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/itemName"
+            android:id="@+id/cItemName"
             android:layout_width="245dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -32,44 +32,60 @@
             android:textColor="@color/Brown"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/itemImage"
+            app:layout_constraintStart_toEndOf="@+id/cItemImage"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constrainedWidth="true"/>
 
         <TextView
-            android:id="@+id/itemPriceCalories"
+            android:id="@+id/cItemPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="$0.00 | 000 Cals"
-            android:textSize="17sp"
+            android:layout_marginBottom="16dp"
+            android:text="$0.00"
+            android:textSize="25sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/itemImage"
-            app:layout_constraintStart_toEndOf="@+id/itemImage" />
+            app:layout_constraintBottom_toBottomOf="@+id/cItemImage"
+            app:layout_constraintStart_toEndOf="@+id/cItemImage" />
+
+        <TextView
+            android:id="@+id/cItemQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+            android:text="0"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/cItemImage"
+            app:layout_constraintEnd_toStartOf="@+id/addQuantity" />
 
         <ImageButton
-            android:id="@+id/addItem"
+            android:id="@+id/addQuantity"
             android:layout_width="38dp"
             android:layout_height="38dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="4dp"
             android:background="@drawable/round"
             android:padding="10dp"
             android:scaleType="fitCenter"
             android:src="@drawable/add"
-            app:layout_constraintBottom_toBottomOf="@+id/itemImage"
+            app:layout_constraintBottom_toBottomOf="@+id/cItemImage"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <TextView
-            android:id="@+id/itemDescription"
-            android:layout_width="235dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:text="TextView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/itemImage"
-            app:layout_constraintTop_toBottomOf="@+id/itemName"
-            app:layout_constrainedWidth="true"/>
+        <ImageButton
+            android:id="@+id/minusQuantity"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/round"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/add"
+            app:layout_constraintBottom_toBottomOf="@+id/cItemImage"
+            app:layout_constraintEnd_toStartOf="@+id/cItemQuantity" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

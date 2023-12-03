@@ -1,17 +1,24 @@
 package com.example.mobilefinalproject;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +27,16 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
     private Context context;
     private List<itemModel> items;
     private List<itemModel> filteredItems;
-    public static List<itemModel> cart;
+    private List<itemModel> cart;
+
+    private static final String CART_PREFS = "cart_prefs";
+    private static final String CART_ITEMS_KEY = "cart_items";
 
     Adapter(Context context,List<itemModel> items, String category){
         this.context = context;
         this.items = items;
         filterItemsByCategory(category);
+        initCartFromSharedPreferences();
     }
 
     private void filterItemsByCategory(String category) {
@@ -56,6 +67,16 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
         holder.descriptionOutput.setText(description);
         holder.priceCalorieOutput.setText(String.format("$%s | %s Cals", price, calories));
         holder.image.setImageBitmap(bitmap);
+
+        holder.addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int currentItem = holder.getAdapterPosition();
+                itemModel selectedItem = filteredItems.get(currentItem);
+                addToCart(selectedItem);
+                Toast.makeText(context, selectedItem.getItemName() + " has been Added to Cart", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -68,7 +89,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
         TextView descriptionOutput;
         TextView priceCalorieOutput;
         ImageView image;
-        Button addBtn;
+        ImageButton addBtn;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -77,38 +98,72 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
             priceCalorieOutput = itemView.findViewById(R.id.itemPriceCalories);
             image = itemView.findViewById(R.id.itemImage);
             addBtn = itemView.findViewById(R.id.addItem);
-
-            addBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    itemModel selectedItem = filteredItems.get(getAdapterPosition());
-                    handelAddItem(selectedItem);
-                }
-            });
         }
     }
 
-    private void handelAddItem(itemModel selectedItem) {
+    private void addToCart(itemModel selectedItem) {
         int index = findItemIndex(selectedItem);
         if (index != -1) {
-            // Item already exists, increment its quantity
-            itemModel existingItem = filteredItems.get(index);
-            existingItem.setQuantity(existingItem.getQuantity() + 1);
+            // Item already exists in cart, increment its quantity
+            int incrementQuantity = cart.get(index).getQuantity() + 1;
+            cart.get(index).setQuantity(incrementQuantity);
+            Toast.makeText(context, cart.get(index).getItemName() + ", " + cart.get(index).getQuantity(), Toast.LENGTH_SHORT).show();
         } else {
-            // New item, add it to the list with quantity 1
-            selectedItem.setQuantity(1);
+            itemModel newItem = new itemModel(
+                    selectedItem.getItemName(),
+                    selectedItem.getPrice(),
+                    selectedItem.getImage(),
+                    selectedItem.getDescription(),
+                    selectedItem.getCalories(),
+                    selectedItem.getCategory()
+            );
+            newItem.setQuantity(1);
+            Toast.makeText(context, newItem.getItemName() + ", " + newItem.getQuantity(), Toast.LENGTH_SHORT).show();
+            cart.add(newItem);
         }
 
-        cart.add(selectedItem);
+        saveCartToSharedPreferences();
     }
 
     private int findItemIndex(itemModel selectedItem) {
-        for (int i = 0; i < items.size(); i++) {
-            itemModel currentItem = items.get(i);
-            if (currentItem.equals(selectedItem)) {
-                return i; // Return the index when the item is found
+        if (cart != null) {
+            for (int i = 0; i < cart.size(); i++) {
+                itemModel currentItem = cart.get(i);
+                if (currentItem.getItemName().equals(selectedItem.getItemName())) {
+                    return i; // Return the index when the item name matches
+                }
             }
         }
         return -1; // Return -1 if the item is not found
     }
+
+    private void initCartFromSharedPreferences() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CART_PREFS, Context.MODE_PRIVATE);
+        String cartItemsJson = sharedPreferences.getString(CART_ITEMS_KEY, "");
+
+        Log.d("SharedPreferences", "Retrieved JSON: " + cartItemsJson);
+
+        if (!cartItemsJson.isEmpty()) {
+            Gson gson = new Gson();
+            cart = gson.fromJson(cartItemsJson, new TypeToken<List<itemModel>>(){}.getType());
+            Log.d("SharedPreferences", "test: " + cart.get(0).getCalories());
+        } else {
+            cart = new ArrayList<>();
+        }
+    }
+
+    // Save cart to SharedPreferences
+    private void saveCartToSharedPreferences() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CART_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Gson gson = new Gson();
+        String cartItemsJson = gson.toJson(cart);
+
+        Log.d("SharedPreferences", "Saved JSON: " + cartItemsJson);
+
+        editor.putString(CART_ITEMS_KEY, cartItemsJson);
+        editor.apply();
+    }
+
 }

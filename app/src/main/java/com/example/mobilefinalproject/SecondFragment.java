@@ -129,7 +129,7 @@ public class SecondFragment extends Fragment {
                     bundle.putLong("id",db.getUserID(userName));
                     Toast.makeText(getActivity(), "ID: "+db.getUserID(userName), Toast.LENGTH_SHORT).show();
                     
-                    NavHostFragment.findNavController(SecondFragment.this).navigate(R.id.second_to_review,bundle);
+                    NavHostFragment.findNavController(SecondFragment.this).navigate(R.id.action_secondFragment_to_fourthFragment,bundle);
                   //  Thread.sleep(5000);
                 } else {
                     Toast.makeText(getActivity(), "Invalid Password", Toast.LENGTH_SHORT).show();

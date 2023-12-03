@@ -96,9 +96,6 @@ public class reviewFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("username", username);
                 bundle.putLong("id",userID);
-
-
-                NavHostFragment.findNavController(reviewFragment.this).navigate(R.id.review_to_orderView,bundle);
             }
         });;
     }
