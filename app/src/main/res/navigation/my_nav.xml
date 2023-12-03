@@ -58,6 +58,9 @@
         <action
             android:id="@+id/action_fourthFragment_to_cartFragment"
             app:destination="@id/cartFragment" />
+        <action
+            android:id="@+id/action_fourthFragment_to_locatorFragment"
+            app:destination="@id/locatorFragment" />
     </fragment>
     <fragment
         android:id="@+id/fifthFragment"
@@ -99,6 +102,15 @@
         tools:layout="@layout/fragment_cart" >
         <action
             android:id="@+id/action_cartFragment_to_fourthFragment"
+            app:destination="@id/fourthFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/locatorFragment"
+        android:name="com.example.mobilefinalproject.locatorFragment"
+        android:label="fragment_locator"
+        tools:layout="@layout/fragment_locator" >
+        <action
+            android:id="@+id/action_locatorFragment_to_fourthFragment"
             app:destination="@id/fourthFragment" />
     </fragment>
 </navigation>

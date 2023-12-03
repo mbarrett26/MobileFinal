@@ -8,10 +8,11 @@
     tools:context=".reviewFragment">
 
     <include
-        android:id="@+id/menuBar_orders"
+        android:id="@+id/menuBar_reviews"
         layout="@layout/app_toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,19 +23,21 @@
             android:id="@+id/addReview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="92dp"
-            android:text="Button"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="74dp" />
-
-        <Button
-            android:id="@+id/goOrder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
-            android:layout_marginEnd="172dp"
-            android:text="Order"
+            android:layout_marginTop="76dp"
+            android:text="Make Review"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/reviewList"
+            android:layout_width="396dp"
+            android:layout_height="720dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addReview" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

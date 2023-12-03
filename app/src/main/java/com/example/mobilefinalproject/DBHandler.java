@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -150,8 +151,9 @@ public class DBHandler extends SQLiteOpenHelper {
             do{
                 reviewModel revi = new reviewModel();
 
-                revi.setUsername(getUserName(cursor.getLong(0)));
-                revi.setRating(cursor.getInt(1));
+                revi.setUsername("1");
+                Log.d("DbCheck", "username: " + revi.getUsername());
+                revi.setRating(Integer.parseInt(cursor.getString(1)));
                 revi.setReviewText(cursor.getString(2));
 
                 reviews.add(revi);

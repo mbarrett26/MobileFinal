@@ -258,13 +258,11 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.itemLocator:
-                Toast.makeText(getActivity(), "Locator Button Clicked", Toast.LENGTH_SHORT).show();
-                //Do Something
+                NavHostFragment.findNavController(FourthFragment.this).navigate(R.id.action_fourthFragment_to_locatorFragment,makeBundle());
                 break;
 
             case R.id.userOrders:
                 NavHostFragment.findNavController(FourthFragment.this).navigate(R.id.action_fourthFragment_to_orderViewFragment,makeBundle());
-                //Do Something
                 break;
 
             case R.id.userReview:

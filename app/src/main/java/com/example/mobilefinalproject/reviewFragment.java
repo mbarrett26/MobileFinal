@@ -3,14 +3,25 @@ package com.example.mobilefinalproject;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -28,8 +39,9 @@ import java.util.List;
  */
 public class reviewFragment extends Fragment {
 
-
     private FragmentReviewBinding binding;
+    private Toolbar toolbar;
+    private reviewAdapter adapter;
     DBHandler db;
 
     String username;
@@ -61,7 +73,53 @@ public class reviewFragment extends Fragment {
 
         binding = FragmentReviewBinding.inflate(getLayoutInflater());
 
+        toolbar = binding.menuBarReviews.toolbar;
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        if(((AppCompatActivity)getActivity()).getSupportActionBar()!=null){
+            Drawable drawable= getResources().getDrawable(R.drawable.back);
+            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+            Drawable newdrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 25, 25, true));
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(newdrawable);
+        }
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("");
+
+        setToolbarMenu();
+
+        List<reviewModel> list = db.getReview(5);
+        binding.reviewList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new reviewAdapter(getActivity(), list);
+        binding.reviewList.setAdapter(adapter);
+
         return binding.getRoot();
+    }
+
+    private void setToolbarMenu() {
+        requireActivity().addMenuProvider(new MenuProvider() {
+
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menuInflater.inflate(R.menu.main_menu, menu);
+                MenuItem searchView = menu.findItem(R.id.action_search);
+                MenuItem cart = menu.findItem(R.id.action_cart);
+
+                searchView.setVisible(false);
+                cart.setVisible(false);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == android.R.id.home){
+                    Bundle bundlePass = new Bundle();
+                    bundlePass.putString("username", username);
+                    bundlePass.putLong("id",userID);
+
+                    NavHostFragment.findNavController(reviewFragment.this).navigate(R.id.action_reviewFragment_to_fourthFragment,bundlePass);
+                }
+
+                return false;
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 
 
@@ -90,15 +148,6 @@ public class reviewFragment extends Fragment {
                 }
             }
          });
-
-        binding.goOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putString("username", username);
-                bundle.putLong("id",userID);
-            }
-        });;
     }
 
     private void getReviews() {
@@ -131,6 +180,7 @@ public class reviewFragment extends Fragment {
 
                     Toast.makeText(getActivity(), "Rating " + rating, Toast.LENGTH_SHORT).show();
                     db.addReview(userID,rating,reviewText);
+                    adapter.refresh(db.getReview(5));
                 } else {
                     Toast.makeText(getActivity(), "Please ensure fields aren't empty", Toast.LENGTH_SHORT).show();
                 }
