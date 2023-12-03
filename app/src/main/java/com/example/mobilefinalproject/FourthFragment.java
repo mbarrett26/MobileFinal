@@ -95,7 +95,7 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
 
         mSensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
         Objects.requireNonNull(mSensorManager).registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                SensorManager.SENSOR_DELAY_GAME);
+                SensorManager.SENSOR_DELAY_UI);
         mAccel = 10f;
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
@@ -103,6 +103,7 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
         DBHandler db = new DBHandler(getActivity());
 
         byte[] burger = bitmapToByte(getResources().getDrawable(R.drawable.burger));
+
 /*
         db.addItem(new itemModel("Tex-Mex Burger", 11.49, burger, "Beef patty topped with spicy jalapeños, pepper jack cheese, guacamole, and salsa", 690, "Specialties"));
         db.addItem(new itemModel("Cajun Sweet Potato Fries", 5.49, burger, "Sweet potato fries seasoned with Cajun spices, served with a zesty dipping sauce", 340, "Sides"));
@@ -287,7 +288,7 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
         if(getArguments() != null){
             username = getArguments().getString("username");
             userID = getArguments().getLong("id");
-            Toast.makeText(getActivity(), "ID "+userID+" name:"+username, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "ID "+userID+" name:"+username, Toast.LENGTH_SHORT).show();
         }
 
         View.OnClickListener categoryClickListener = new View.OnClickListener() {
@@ -320,7 +321,7 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
                         category = "Beverages";
                         break;
                     case R.id.sidesDessert:
-                        category = "Dessert";
+                        category = "Desserts";
                         break;
                 }
 
@@ -343,9 +344,14 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
         binding.sidesDessert.setOnClickListener(categoryClickListener);
     }
 
+    private static final float SHAKE_THRESHOLD_GRAVITY = 2.7F;
+    private static final int SHAKE_SLOP_TIME_MS = 500;
+    private static final int SHAKE_COUNT_RESET_TIME_MS = 3000;
+
     private final SensorEventListener mSensorListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
+            /*
             float x = event.values[0];
             float y = event.values[1];
             float z = event.values[2];
@@ -353,7 +359,20 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
             mAccelCurrent = (float) Math.sqrt((double) (x * x + y * y + z * z));
             float delta = mAccelCurrent - mAccelLast;
             mAccel = mAccel * 0.9f + delta;
-            if (mAccel > 10) {
+            Toast.makeText(getActivity(), "move", Toast.LENGTH_SHORT).show();
+
+             */
+
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
+
+            float gX = x / SensorManager.GRAVITY_EARTH;
+            float gY = y / SensorManager.GRAVITY_EARTH;
+            float gZ = z / SensorManager.GRAVITY_EARTH;
+            float gForce = (float) Math.sqrt((double) (gX * gX + gY * gY + gZ * gZ));
+
+            if (gForce > SHAKE_THRESHOLD_GRAVITY) {
                 NavHostFragment.findNavController(FourthFragment.this).navigate(R.id.action_fourthFragment_to_cartFragment,makeBundle());
             }
         }
@@ -365,7 +384,7 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
     @Override
     public void onResume() {
         mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                SensorManager.SENSOR_DELAY_NORMAL);
+                SensorManager.SENSOR_DELAY_UI);
         super.onResume();
     }
     @Override

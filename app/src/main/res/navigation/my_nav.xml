@@ -78,12 +78,20 @@
         android:id="@+id/reviewFragment"
         android:name="com.example.mobilefinalproject.reviewFragment"
         android:label="fragment_review"
-        tools:layout="@layout/fragment_review" />
+        tools:layout="@layout/fragment_review" >
+        <action
+            android:id="@+id/action_reviewFragment_to_fourthFragment"
+            app:destination="@id/fourthFragment" />
+    </fragment>
     <fragment
         android:id="@+id/orderViewFragment"
         android:name="com.example.mobilefinalproject.orderViewFragment"
         android:label="fragment_order_view"
-        tools:layout="@layout/fragment_order_view" />
+        tools:layout="@layout/fragment_order_view" >
+        <action
+            android:id="@+id/action_orderViewFragment_to_fourthFragment"
+            app:destination="@id/fourthFragment" />
+    </fragment>
     <fragment
         android:id="@+id/cartFragment"
         android:name="com.example.mobilefinalproject.CartFragment"

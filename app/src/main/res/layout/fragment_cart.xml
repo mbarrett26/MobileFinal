@@ -48,6 +48,17 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp" />
 
+                <TextView
+                    android:id="@+id/cartEmptyPrompt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="30dp"
+                    android:text="Cart is Empty ..."
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:gravity="center"/>
+
                 <View
                     android:id="@+id/divider1"
                     android:layout_width="match_parent"
@@ -145,13 +156,77 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
+                    <RadioGroup
+                        android:id="@+id/radioGroup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="32dp"
+                        android:orientation="horizontal"
+
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView5">
+
+                        <RadioButton
+                            android:id="@+id/radioStore"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="Pay at Store"
+                            android:checked="true" />
+
+                        <RadioButton
+                            android:id="@+id/radioOnline"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="Pay Right Now" />
+
+
+                    </RadioGroup>
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <com.github.credit_card_view.CreditCardView
+                    android:id="@+id/creditCardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    app:card_autoFocusCardNumber="false"
+                    app:card_backGradientEnd="#626262"
+                    app:card_backGradientStart="#2D2D2D"
+                    app:card_backStrip2Color="#303030"
+                    app:card_backStripColor="@color/black"
+                    app:card_cardExpiryHeaderColor="#C4C4C4"
+                    app:card_cardExpiryHintColor="#4DFFFFFF"
+                    app:card_cardExpiryTextColor="@color/white"
+                    app:card_cardNameHeaderColor="#C4C4C4"
+                    app:card_cardNameHintColor="#4DFFFFFF"
+                    app:card_cardNameTextColor="@color/white"
+                    app:card_cardNumberHintColor="#656565"
+                    app:card_cardNumberTextColor="@color/white"
+                    app:card_cvvBackgroundColor="@color/white"
+                    app:card_cvvHintColor="#4D000000"
+                    app:card_cvvTextColor="#000000"
+                    app:card_frontGradientEnd="#313131"
+                    app:card_frontGradientStart="#1F1F1F"
+                    app:card_isBackSideEditable="true"
+                    app:card_isFrontSideEditable="true"
+                    app:card_outline_base_color="#EBB46A"
+                    app:card_outline_error_color="#EB6A6E"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="gone"/>
 
                 <Button
                     android:id="@+id/orderButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Order" />
+                    android:text="Order"
+                    android:backgroundTint="@color/Brown"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="32dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"/>
 
             </LinearLayout>
         </ScrollView>

@@ -1,5 +1,7 @@
 package com.example.mobilefinalproject;
 
+import static android.view.View.GONE;
+
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -20,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.example.mobilefinalproject.databinding.FragmentCartBinding;
@@ -88,6 +91,14 @@ public class CartFragment extends Fragment implements cartAdapter.QuantityChange
         subtotalCalc = adapter.calculateTotalPrice();
         updatePrice();
 
+        if(subtotalCalc == 0.00){
+            binding.radioGroup.setVisibility(GONE);
+            binding.cartList.setVisibility(GONE);
+            binding.creditCardView.setVisibility(GONE);
+        }else{
+            binding.cartEmptyPrompt.setVisibility(GONE);
+        }
+
         username = getArguments().getString("username");
         userID = getArguments().getLong("id");
 
@@ -138,7 +149,6 @@ public class CartFragment extends Fragment implements cartAdapter.QuantityChange
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-
         binding.orderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,6 +157,20 @@ public class CartFragment extends Fragment implements cartAdapter.QuantityChange
                 } else {
                     Toast.makeText(getActivity(), "Please add an item to the Cart", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        binding.radioStore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                binding.creditCardView.setVisibility(View.VISIBLE);
+            }
+        });
+
+        binding.radioOnline.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                binding.creditCardView.setVisibility(GONE);
             }
         });
 

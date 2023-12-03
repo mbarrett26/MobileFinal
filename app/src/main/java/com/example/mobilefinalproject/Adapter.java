@@ -74,7 +74,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
                 int currentItem = holder.getAdapterPosition();
                 itemModel selectedItem = filteredItems.get(currentItem);
                 addToCart(selectedItem);
-                Toast.makeText(context, selectedItem.getItemName() + " has been Added to Cart", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, selectedItem.getItemName() + " has been Added to Cart", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -107,7 +107,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
             // Item already exists in cart, increment its quantity
             int incrementQuantity = cart.get(index).getQuantity() + 1;
             cart.get(index).setQuantity(incrementQuantity);
-            Toast.makeText(context, cart.get(index).getItemName() + ", " + cart.get(index).getQuantity(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, cart.get(index).getItemName() + ", " + cart.get(index).getQuantity(), Toast.LENGTH_SHORT).show();
         } else {
             itemModel newItem = new itemModel(
                     selectedItem.getItemName(),
@@ -118,7 +118,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
                     selectedItem.getCategory()
             );
             newItem.setQuantity(1);
-            Toast.makeText(context, newItem.getItemName() + ", " + newItem.getQuantity(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, newItem.getItemName() + ", " + newItem.getQuantity(), Toast.LENGTH_SHORT).show();
             cart.add(newItem);
         }
 
