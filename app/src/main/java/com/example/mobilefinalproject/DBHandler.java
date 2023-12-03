@@ -192,7 +192,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         // array of columns to fetch
         String[] columns = {
-                Col_order_3,Col_total_3
+                Col_userid_3,Col_order_3,Col_total_3
         };
         SQLiteDatabase db = this.getReadableDatabase();
         // selection criteria
@@ -211,8 +211,9 @@ public class DBHandler extends SQLiteOpenHelper {
         if(cursor.moveToFirst()){
             do{
                 orderModel order = new orderModel();
-                order.setOrderList(cursor.getString(0));
-                order.setTotal(Double.parseDouble(cursor.getString(1)));
+                order.setUserID(Long.parseLong(cursor.getString(0)));
+                order.setOrderList(cursor.getString(1));
+                order.setTotal(Double.parseDouble(cursor.getString(2)));
                 orders.add(order);
 
             }while (cursor.moveToNext());

@@ -48,18 +48,12 @@ public class FifthFragment extends Fragment {
     private Adapter adapter;
     private String category;
     private String username;
+    private Long userID;
     private Bundle bundle;
     private List<itemModel> cart;
 
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public FifthFragment() {
         // Required empty public constructor
@@ -77,8 +71,7 @@ public class FifthFragment extends Fragment {
     public static FifthFragment newInstance(String param1, String param2) {
         FifthFragment fragment = new FifthFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -86,14 +79,12 @@ public class FifthFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
         dbHandler = new DBHandler(getActivity());
         bundle = new Bundle();
         category = getArguments().getString("category");
         username = getArguments().getString("username");
+        userID = getArguments().getLong("id");
     }
 
     @Override
@@ -146,7 +137,7 @@ public class FifthFragment extends Fragment {
                 switch (menuItem.getItemId()){
                     case android.R.id.home:
                         //bundle.putString("cart", Adapter.cart);
-                        NavHostFragment.findNavController(FifthFragment.this).navigate(R.id.action_fifthFragment_to_fourthFragment);
+                        NavHostFragment.findNavController(FifthFragment.this).navigate(R.id.action_fifthFragment_to_fourthFragment,makeBundle());
                         break;
 
                     case R.id.action_search:
@@ -154,7 +145,7 @@ public class FifthFragment extends Fragment {
                         break;
 
                     case R.id.action_cart:
-                        NavHostFragment.findNavController(FifthFragment.this).navigate(R.id.action_fifthFragment_to_cartFragment);
+                        NavHostFragment.findNavController(FifthFragment.this).navigate(R.id.action_fifthFragment_to_cartFragment,makeBundle());
                         //Do Something
                         break;
                 }
@@ -162,5 +153,13 @@ public class FifthFragment extends Fragment {
                 return false;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+    }
+
+    private Bundle makeBundle(){ //used to make the bundle that is passed between fragments
+        Bundle bundle = new Bundle();
+        bundle.putString("username", username);
+        bundle.putLong("id",userID);
+
+        return bundle;
     }
 }

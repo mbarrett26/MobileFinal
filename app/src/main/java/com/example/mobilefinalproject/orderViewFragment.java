@@ -69,14 +69,17 @@ public class orderViewFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         username = getArguments().getString("username");
         userID = getArguments().getLong("id");
-
+        Toast.makeText(getActivity(), "ID: "+userID, Toast.LENGTH_SHORT).show();
         //db.addOrder(new orderModel("Taco",72.99,userID));
 
         binding.showOrders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 List<orderModel> list = db.getOrders(userID);
-                Toast.makeText(getActivity(), "List"+list.get(0).toString(), Toast.LENGTH_SHORT).show(); //make into recycler
+
+                Toast.makeText(getActivity(), ""+list.get(0), Toast.LENGTH_SHORT).show();
+
+                //Toast.makeText(getActivity(), "List"+list.get(0).toString(), Toast.LENGTH_SHORT).show(); //make into recycler
             }
         });;
     }

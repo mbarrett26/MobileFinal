@@ -1,6 +1,7 @@
 package com.example.mobilefinalproject;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -104,11 +105,10 @@ public class reviewFragment extends Fragment {
 
     }
 
-    protected void onCreateDialog(int id)
-    {
+    protected void onCreateDialog(int id) {
         final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
 
-        LinearLayout lila1= new LinearLayout(getActivity());
+        LinearLayout lila1 = new LinearLayout(getActivity());
         lila1.setOrientation(LinearLayout.VERTICAL); //1 is for vertical orientation
         final EditText input = new EditText(getActivity());
         final EditText input1 = new EditText(getActivity());
@@ -125,17 +125,24 @@ public class reviewFragment extends Fragment {
 
         alert.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                int rating = Integer.parseInt(input.getText().toString().trim());
-                String reviewText = input1.getText().toString().trim();
+                if (!(String.valueOf(input.getText()).trim().isEmpty() || input1.getText().toString().trim().isEmpty())) {
+                    int rating = Math.min(Integer.parseInt(input.getText().toString().trim()), 5);
+                    String reviewText = input1.getText().toString().trim();
 
-                db.addReview(userID,rating,reviewText);
+                    Toast.makeText(getActivity(), "Rating " + rating, Toast.LENGTH_SHORT).show();
+                    db.addReview(userID,rating,reviewText);
+                } else {
+                    Toast.makeText(getActivity(), "Please ensure fields aren't empty", Toast.LENGTH_SHORT).show();
+                }
 
-
-            } });
+            }
+        });
         alert.setNegativeButton("Cancel",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        dialog.cancel();    }     });
+                        dialog.cancel();
+                    }
+                });
 
         alert.create().show();
 

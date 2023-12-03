@@ -1,8 +1,15 @@
 package com.example.mobilefinalproject;
 
+
+
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,6 +37,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -49,14 +57,13 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
     private Bundle bundle;
     private List<itemModel> cart;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private String username;
+    private Long userID;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private SensorManager mSensorManager;
+    private float mAccel,mAccelCurrent , mAccelLast;
+
+
 
     public FourthFragment() {
         // Required empty public constructor
@@ -74,8 +81,7 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
     public static FourthFragment newInstance(String param1, String param2) {
         FourthFragment fragment = new FourthFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -83,14 +89,16 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
 
         bundle = new Bundle();
 
-
+        mSensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
+        Objects.requireNonNull(mSensorManager).registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_GAME);
+        mAccel = 10f;
+        mAccelCurrent = SensorManager.GRAVITY_EARTH;
+        mAccelLast = SensorManager.GRAVITY_EARTH;
 
         DBHandler db = new DBHandler(getActivity());
 
@@ -226,13 +234,23 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
                         break;
 
                     case R.id.action_cart:
-                        NavHostFragment.findNavController(FourthFragment.this).navigate(R.id.action_fourthFragment_to_cartFragment);
+
+
+                        NavHostFragment.findNavController(FourthFragment.this).navigate(R.id.action_fourthFragment_to_cartFragment,makeBundle());
                         break;
                 }
 
                 return false;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+    }
+
+    private Bundle makeBundle(){ //used to make the bundle that is passed between fragments
+        Bundle bundle = new Bundle();
+        bundle.putString("username", username);
+        bundle.putLong("id",userID);
+
+        return bundle;
     }
 
     @Override
@@ -244,12 +262,12 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
                 break;
 
             case R.id.userOrders:
-                NavHostFragment.findNavController(FourthFragment.this).navigate(R.id.action_fourthFragment_to_orderViewFragment);
+                NavHostFragment.findNavController(FourthFragment.this).navigate(R.id.action_fourthFragment_to_orderViewFragment,makeBundle());
                 //Do Something
                 break;
 
             case R.id.userReview:
-                NavHostFragment.findNavController(FourthFragment.this).navigate(R.id.action_fourthFragment_to_reviewFragment);
+                NavHostFragment.findNavController(FourthFragment.this).navigate(R.id.action_fourthFragment_to_reviewFragment,makeBundle());
                 break;
 
             case R.id.userLogout:
@@ -265,6 +283,12 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         //output = getArguments().getString("username");
         //Toast.makeText(getActivity(), "Logged In as: " + output, Toast.LENGTH_SHORT).show();
+
+        if(getArguments() != null){
+            username = getArguments().getString("username");
+            userID = getArguments().getLong("id");
+            Toast.makeText(getActivity(), "ID "+userID+" name:"+username, Toast.LENGTH_SHORT).show();
+        }
 
         View.OnClickListener categoryClickListener = new View.OnClickListener() {
             @Override
@@ -301,6 +325,8 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
                 }
 
                 bundle.putString("category", category);
+                bundle.putString("username", username);
+                bundle.putLong("id",userID);
                 NavHostFragment.findNavController(FourthFragment.this).navigate(R.id.action_fourthFragment_to_fifthFragment, bundle);
             }
         };
@@ -315,5 +341,36 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
         binding.sidesApps.setOnClickListener(categoryClickListener);
         binding.sidesBeverages.setOnClickListener(categoryClickListener);
         binding.sidesDessert.setOnClickListener(categoryClickListener);
+    }
+
+    private final SensorEventListener mSensorListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
+            mAccelLast = mAccelCurrent;
+            mAccelCurrent = (float) Math.sqrt((double) (x * x + y * y + z * z));
+            float delta = mAccelCurrent - mAccelLast;
+            mAccel = mAccel * 0.9f + delta;
+            if (mAccel > 10) {
+                NavHostFragment.findNavController(FourthFragment.this).navigate(R.id.action_fourthFragment_to_cartFragment,makeBundle());
+            }
+        }
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
+    };
+
+    @Override
+    public void onResume() {
+        mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL);
+        super.onResume();
+    }
+    @Override
+    public void onPause() {
+        mSensorManager.unregisterListener(mSensorListener);
+        super.onPause();
     }
 }

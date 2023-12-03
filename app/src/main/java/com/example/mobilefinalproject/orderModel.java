@@ -12,8 +12,7 @@ public class orderModel {
 
     @Override
     public String toString() {
-        return "orderModel{" +
-                "userID=" + userID +
+        return "userID=" + userID +
                 ", orderList='" + orderList + '\'' +
                 ", total=" + total +
                 '}';

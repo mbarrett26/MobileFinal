@@ -20,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.mobilefinalproject.databinding.FragmentCartBinding;
 
@@ -36,34 +37,19 @@ public class CartFragment extends Fragment implements cartAdapter.QuantityChange
     private double subtotalCalc = 0.00;
     private double taxCalc = 0.00;
     private double totalCalc = 0.00;
+    private String username;
+    private Long userID;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private DBHandler db;
 
     public CartFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CartFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static CartFragment newInstance(String param1, String param2) {
         CartFragment fragment = new CartFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -71,10 +57,7 @@ public class CartFragment extends Fragment implements cartAdapter.QuantityChange
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        db = new DBHandler(getActivity());
     }
 
     @Override
@@ -104,6 +87,9 @@ public class CartFragment extends Fragment implements cartAdapter.QuantityChange
 
         subtotalCalc = adapter.calculateTotalPrice();
         updatePrice();
+
+        username = getArguments().getString("username");
+        userID = getArguments().getLong("id");
 
         return binding.getRoot();
     }
@@ -138,12 +124,48 @@ public class CartFragment extends Fragment implements cartAdapter.QuantityChange
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 if (menuItem.getItemId() == android.R.id.home){
-                    NavHostFragment.findNavController(CartFragment.this).navigate(R.id.action_cartFragment_to_fourthFragment);
+                    Bundle bundlePass = new Bundle();
+                    bundlePass.putString("username", username);
+                    bundlePass.putLong("id",userID);
+
+                    NavHostFragment.findNavController(CartFragment.this).navigate(R.id.action_cartFragment_to_fourthFragment,bundlePass);
                 }
 
                 return false;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+
+        binding.orderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(adapter.getItemCount()>0) {
+                    makeOrder();
+                } else {
+                    Toast.makeText(getActivity(), "Please add an item to the Cart", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
+
+    public void makeOrder(){
+        Toast.makeText(getActivity(), "Item Names"+adapter.getAllItemNames().toString(), Toast.LENGTH_SHORT).show();
+
+        orderModel input = new orderModel(adapter.getAllItemNames().toString(),totalCalc,userID);
+
+        db.addOrder(input);
+
+        adapter.clearCartInSharedPreferences();
+
+        Bundle bundlePass = new Bundle();
+        bundlePass.putString("username", username);
+        bundlePass.putLong("id",userID);
+
+        NavHostFragment.findNavController(CartFragment.this).navigate(R.id.action_cartFragment_to_fourthFragment,bundlePass);
     }
 
 }

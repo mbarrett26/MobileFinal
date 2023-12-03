@@ -94,7 +94,7 @@ public class SecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         db = new DBHandler(getActivity());
-        //db.deleteDB();
+       // db.deleteDB();
         userInp=binding.edUsername;
         passInp=binding.edPassword;
         binding.btnReturn.setOnClickListener(new View.OnClickListener() {
@@ -127,7 +127,8 @@ public class SecondFragment extends Fragment {
                     Bundle bundle = new Bundle();
                     bundle.putString("username", userName);
                     bundle.putLong("id",db.getUserID(userName));
-                    Toast.makeText(getActivity(), "ID: "+db.getUserID(userName), Toast.LENGTH_SHORT).show();
+
+                    //Toast.makeText(getActivity(), "ID: "+db.getUserID(userName), Toast.LENGTH_SHORT).show();
                     
                     NavHostFragment.findNavController(SecondFragment.this).navigate(R.id.action_secondFragment_to_fourthFragment,bundle);
                   //  Thread.sleep(5000);

@@ -185,5 +185,13 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.MyViewHolder> 
         editor.apply();
     }
 
+    public void clearCartInSharedPreferences(){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CART_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(CART_ITEMS_KEY, "");
+        editor.apply();
+    }
+
 }
 
