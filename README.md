@@ -7,8 +7,6 @@ Briefly describe the project and its main goals or functionalities.
 - [Installation](#installation)
 - [Usage](#usage)
 - [Features](#features)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Installation
 Instructions for installation:
