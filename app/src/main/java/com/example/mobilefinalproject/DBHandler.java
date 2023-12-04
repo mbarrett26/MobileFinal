@@ -151,7 +151,7 @@ public class DBHandler extends SQLiteOpenHelper {
             do{
                 reviewModel revi = new reviewModel();
 
-                revi.setUsername("1");
+                revi.setUsername(getUserName(cursor.getLong(0)));
                 Log.d("DbCheck", "username: " + revi.getUsername());
                 revi.setRating(Integer.parseInt(cursor.getString(1)));
                 revi.setReviewText(cursor.getString(2));
