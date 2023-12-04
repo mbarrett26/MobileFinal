@@ -198,8 +198,7 @@ public class locatorFragment extends Fragment implements OnMapReadyCallback {
             fusedLocationClient.getLastLocation()
                     .addOnSuccessListener(requireActivity(), location -> {
                         if (location != null) {
-                            LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 13f));
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(store, 15f));
                         }
                     });
         } else {

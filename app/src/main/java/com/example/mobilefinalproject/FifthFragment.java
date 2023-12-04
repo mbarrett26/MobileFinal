@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.example.mobilefinalproject.databinding.FragmentFifthBinding;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,6 +46,7 @@ public class FifthFragment extends Fragment {
     private Toolbar toolbar;
     private NavigationView navigationView;
     private List<itemModel> items;
+    private List<itemModel> filteredItems;
     private Adapter adapter;
     private String category;
     private String username;
@@ -108,8 +110,15 @@ public class FifthFragment extends Fragment {
         setToolbarMenu();
 
         items = dbHandler.getItems();
+        filteredItems = new ArrayList<>();
+        for (itemModel item : items) {
+            if (item.getCategory().equals(category)) {
+                filteredItems.add(item);
+            }
+        }
+
         binding.menuList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new Adapter(getActivity(), items, category);
+        adapter = new Adapter(getActivity(), filteredItems);
         binding.menuList.setAdapter(adapter);
 
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.item_spacing); // Define your spacing in pixels
@@ -130,6 +139,20 @@ public class FifthFragment extends Fragment {
                 searchView.setIconifiedByDefault(false);
                 searchView.setQueryHint("Type something...");
                 searchView.clearFocus();
+
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        // Filter the items based on the search query
+                        filterItems(newText);
+                        return true;
+                    }
+                });
             }
 
             @Override
@@ -138,10 +161,6 @@ public class FifthFragment extends Fragment {
                     case android.R.id.home:
                         //bundle.putString("cart", Adapter.cart);
                         NavHostFragment.findNavController(FifthFragment.this).navigate(R.id.action_fifthFragment_to_fourthFragment,makeBundle());
-                        break;
-
-                    case R.id.action_search:
-                        //Do Something
                         break;
 
                     case R.id.action_cart:
@@ -153,6 +172,20 @@ public class FifthFragment extends Fragment {
                 return false;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+    }
+
+    private void filterItems(String query) {
+        List<itemModel> filteredList = new ArrayList<>();
+        for (itemModel item : filteredItems) {
+            // Filter logic based on item attributes (e.g., name, description)
+            if (item.getItemName().toLowerCase().contains(query.toLowerCase())
+                    || item.getDescription().toLowerCase().contains(query.toLowerCase())) {
+                filteredList.add(item);
+            }
+        }
+
+        // Update the adapter with the filtered items
+        adapter.filterList(filteredList);
     }
 
     private Bundle makeBundle(){ //used to make the bundle that is passed between fragments

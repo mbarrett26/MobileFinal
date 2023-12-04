@@ -25,27 +25,17 @@ import java.util.List;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
     private Context context;
-    private List<itemModel> items;
     private List<itemModel> filteredItems;
     private List<itemModel> cart;
 
     private static final String CART_PREFS = "cart_prefs";
     private static final String CART_ITEMS_KEY = "cart_items";
 
-    Adapter(Context context,List<itemModel> items, String category){
+    Adapter(Context context,List<itemModel> items){
         this.context = context;
-        this.items = items;
-        filterItemsByCategory(category);
-        initCartFromSharedPreferences();
-    }
+        this.filteredItems = items;
 
-    private void filterItemsByCategory(String category) {
-        filteredItems = new ArrayList<>();
-        for (itemModel item : items) {
-            if (item.getCategory().equals(category)) {
-                filteredItems.add(item);
-            }
-        }
+        initCartFromSharedPreferences();
     }
 
     @NonNull
@@ -82,6 +72,11 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
     @Override
     public int getItemCount() {
         return filteredItems.size();
+    }
+
+    public void filterList(List<itemModel> filteredList) {
+        this.filteredItems = filteredList;
+        notifyDataSetChanged();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
