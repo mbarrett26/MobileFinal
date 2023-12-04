@@ -1,4 +1,9 @@
 # Mobile Food Ordering Application
+Group 13
+- Mithusan Arulampalam
+- Banujan Sutheswaran
+- Micheal Barrett
+
 
 ## Overview
 Briefly describe the project and its main goals or functionalities.
