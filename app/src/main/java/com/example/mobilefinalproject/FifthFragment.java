@@ -92,25 +92,27 @@ public class FifthFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment using FragmentFifthBinding
         binding = FragmentFifthBinding.inflate(getLayoutInflater());
 
+        // Set up the toolbar in the fragment
         toolbar = binding.menuBarMenu.toolbar;
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        if(((AppCompatActivity)getActivity()).getSupportActionBar()!=null){
-            Drawable drawable= getResources().getDrawable(R.drawable.back);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            // Set custom back icon for the toolbar
+            Drawable drawable = getResources().getDrawable(R.drawable.back);
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
             Drawable newdrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 25, 25, true));
-            ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(newdrawable);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(newdrawable);
         }
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("");
 
-
+        // Set up the menu for this fragment's UI
         setToolbarMenu();
 
+        // Retrieve items from the database and filter them based on category
         items = dbHandler.getItems();
         filteredItems = new ArrayList<>();
         for (itemModel item : items) {
@@ -119,15 +121,18 @@ public class FifthFragment extends Fragment {
             }
         }
 
+        // Set up the RecyclerView to display the filtered items
         binding.menuList.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new Adapter(getActivity(), filteredItems);
         binding.menuList.setAdapter(adapter);
 
-        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.item_spacing); // Define your spacing in pixels
+        // Define spacing between items in the RecyclerView
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.item_spacing);
         binding.menuList.addItemDecoration(new itemDecoration(spacingInPixels));
 
-        return binding.getRoot();
+        return binding.getRoot(); // Return the root view of the binding
     }
+
 
     private void setToolbarMenu() {
         requireActivity().addMenuProvider(new MenuProvider() {

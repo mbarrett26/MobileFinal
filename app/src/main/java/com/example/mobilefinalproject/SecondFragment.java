@@ -53,18 +53,19 @@ public class SecondFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflating the layout for this fragment using data binding
         binding = FragmentSecondBinding.inflate(getLayoutInflater());
 
+        // Setting up the VideoView to play a video
         videoView = (VideoView) binding.vvLoginBackground;
         Uri uri = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.mp_video);
         videoView.setVideoURI(uri);
         videoView.start();
 
+        // Looping the video playback
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
-
                 mediaPlayer.setLooping(true);
             }
         });
@@ -72,34 +73,35 @@ public class SecondFragment extends Fragment {
         return binding.getRoot();
     }
 
-
     @Override
-    public void onResume(){
-       // videoView.resume();
+    public void onResume() {
+        // Resuming video playback when the fragment resumes
         super.onResume();
     }
 
     @Override
-    public void onPause(){
-      //  videoView.suspend();
+    public void onPause() {
+        // Pausing video playback when the fragment is paused
         super.onPause();
     }
 
     @Override
-    public void onDestroy(){
-       // videoView.stopPlayback();
+    public void onDestroy() {
+        // Stopping video playback when the fragment is destroyed
         super.onDestroy();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         db = new DBHandler(getActivity());
-       // db.deleteDB();
-        userInp=binding.edUsername;
-        passInp=binding.edPassword;
+        userInp = binding.edUsername;
+        passInp = binding.edPassword;
+
+        // Handling click events for buttons in the layout
         binding.btnReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Navigating to the FirstFragment
                 NavHostFragment.findNavController(SecondFragment.this).navigate(R.id.action_secondFragment_to_firstFragment);
             }
         });
@@ -107,42 +109,40 @@ public class SecondFragment extends Fragment {
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //CALL DB AND AUTHENTICATE USER :)
+                // Authenticating user credentials when the login button is clicked
                 loginUser();
-               // NavHostFragment.findNavController(SecondFragment.this).navigate(R.id.action_secondFragment_to_fourthFragment);
             }
         });
     }
 
-    private void loginUser()  {
+    private void loginUser() {
+        // Retrieving username and password from EditText fields
         String userName = String.valueOf(userInp.getText()).trim();
         String userPass = String.valueOf(passInp.getText()).trim();
-        if (!(userName.isEmpty() || userPass.isEmpty())){
-            User reg = new User(userName,userPass);  //Creating a new user object.
-            //Toast.makeText(getActivity(), "Valid user input", Toast.LENGTH_SHORT).show();
 
-            if (db.checkUser(userName)){
-                if(db.checkAcc(reg)){
-                    //Toast.makeText(getActivity(), "Successful login", Toast.LENGTH_SHORT).show();
+        // Validating user input for username and password
+        if (!(userName.isEmpty() || userPass.isEmpty())) {
+            User reg = new User(userName, userPass); // Creating a new user object
+
+            if (db.checkUser(userName)) {
+                if (db.checkAcc(reg)) {
+                    // Navigating to FourthFragment if the user is authenticated successfully
                     Bundle bundle = new Bundle();
                     bundle.putString("username", userName);
-                    bundle.putLong("id",db.getUserID(userName));
-
-                    //Toast.makeText(getActivity(), "ID: "+db.getUserID(userName), Toast.LENGTH_SHORT).show();
-                    
-                    NavHostFragment.findNavController(SecondFragment.this).navigate(R.id.action_secondFragment_to_fourthFragment,bundle);
-                  //  Thread.sleep(5000);
+                    bundle.putLong("id", db.getUserID(userName));
+                    NavHostFragment.findNavController(SecondFragment.this).navigate(R.id.action_secondFragment_to_fourthFragment, bundle);
                 } else {
+                    // Handling invalid password
                     Toast.makeText(getActivity(), "Invalid Password", Toast.LENGTH_SHORT).show();
                     passInp.setError("Invalid Password");
                 }
-            } else{
-                Toast.makeText(getActivity(), "User does not exist. Please enter valid username", Toast.LENGTH_SHORT).show();
+            } else {
+                // Handling non-existent user
+                Toast.makeText(getActivity(), "User does not exist. Please enter a valid username", Toast.LENGTH_SHORT).show();
                 userInp.setError("Invalid Username");
             }
-
-
-        }else{
+        } else {
+            // Handling empty form input
             Toast.makeText(getActivity(), "Invalid form input", Toast.LENGTH_SHORT).show();
             passInp.setError("Please enter text");
             userInp.setError("Please enter text");

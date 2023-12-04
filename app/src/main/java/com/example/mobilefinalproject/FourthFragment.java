@@ -90,17 +90,24 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        // Creating a new Bundle instance
         bundle = new Bundle();
 
+        // Accessing the SensorManager system service
         mSensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
+
+        // Registering a sensor listener for the accelerometer sensor
         Objects.requireNonNull(mSensorManager).registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_UI);
-        mAccel = 10f;
-        mAccelCurrent = SensorManager.GRAVITY_EARTH;
-        mAccelLast = SensorManager.GRAVITY_EARTH;
 
-        DBHandler db = new DBHandler(getActivity());
+        // Initializing variables related to accelerometer data
+        mAccel = 10f; // This might represent the acceleration threshold
+        mAccelCurrent = SensorManager.GRAVITY_EARTH; // Current acceleration
+        mAccelLast = SensorManager.GRAVITY_EARTH; // Last recorded acceleration
+
+        // Accessing the database handler by creating an instance of DBHandler
+        DBHandler db = new DBHandler(getActivity()); // This instantiates the database handler
+
 
         byte[] burger = bitmapToByte(getResources().getDrawable(R.drawable.burger));
         byte[] fries = bitmapToByte(getResources().getDrawable(R.drawable.fries));
@@ -182,8 +189,12 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
 */
     }
 
+    // This method converts a Drawable image to a byte array
     public byte[] bitmapToByte(Drawable image){
+        // Convert the Drawable image to a Bitmap
         Bitmap bitmap = ((BitmapDrawable)image).getBitmap();
+
+        // Convert the Bitmap to a byte array
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] bitmapdata = stream.toByteArray();
@@ -191,16 +202,19 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
         return bitmapdata;
     }
 
+    // This method is part of creating the fragment's view
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflate the layout for this fragment using data binding
         binding = FragmentFourthBinding.inflate(getLayoutInflater());
 
+        // Setting up the toolbar
         toolbar = binding.menuBarMain.toolbar;
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("");
 
+        // Setting up the drawer layout and navigation view
         drawerLayout = binding.drawerMain;
         drawerToggle = new ActionBarDrawerToggle(getActivity(),drawerLayout,toolbar,R.string.open_drawer,R.string.close_drawer);
         drawerLayout.addDrawerListener(drawerToggle);
@@ -210,18 +224,22 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
         navigationView = binding.navigationViewMain;
         navigationView.setNavigationItemSelectedListener(this);
 
+        // Setting up the toolbar menu
         setToolbarMenu();
 
+        // Initializing a list of image resources
         List<Integer> imageResources = new ArrayList<>();
         imageResources.add(R.drawable.banner1);
         imageResources.add(R.drawable.banner2);
 
+        // Creating an ImageAdapter and setting it to the ViewPager
         ImageAdapter imageAdapter = new ImageAdapter(imageResources);
         binding.vpDisplay.setAdapter(imageAdapter);
 
-        return binding.getRoot();
+        return binding.getRoot(); // Returning the root view of the fragment
     }
 
+    // This method sets up the toolbar menu
     private void setToolbarMenu() {
         requireActivity().addMenuProvider(new MenuProvider() {
             @Override
@@ -229,19 +247,18 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
                 menuInflater.inflate(R.menu.main_menu, menu);
 
                 MenuItem searchView = menu.findItem(R.id.action_search);
-                searchView.setVisible(false);
+                searchView.setVisible(false); // Hiding the search action in the menu
             }
 
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()){
                     case R.id.action_search:
-                        //Do Something
+                        // Do Something
                         break;
 
                     case R.id.action_cart:
-
-
+                        // Navigating to the cartFragment using Navigation component
                         NavHostFragment.findNavController(FourthFragment.this).navigate(R.id.action_fourthFragment_to_cartFragment,makeBundle());
                         break;
                 }

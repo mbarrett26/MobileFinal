@@ -64,41 +64,46 @@ public class CartFragment extends Fragment implements cartAdapter.QuantityChange
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentCartBinding.inflate(getLayoutInflater());
 
+        // Set up toolbar
         toolbar = binding.menuBarCart.toolbar;
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        if(((AppCompatActivity)getActivity()).getSupportActionBar()!=null){
-            Drawable drawable= getResources().getDrawable(R.drawable.back);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            // Set custom back button on the toolbar
+            Drawable drawable = getResources().getDrawable(R.drawable.back);
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-            Drawable newdrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 25, 25, true));
-            ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(newdrawable);
+            Drawable newDrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 25, 25, true));
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(newDrawable);
         }
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("");
 
-
+        // Set up toolbar menu
         setToolbarMenu();
 
+        // Set up RecyclerView and adapter
         binding.cartList.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new cartAdapter(getActivity());
         adapter.setQuantityChangeListener((cartAdapter.QuantityChangeListener) this);
         binding.cartList.setAdapter(adapter);
 
+        // Calculate subtotal and update UI
         subtotalCalc = adapter.calculateTotalPrice();
         updatePrice();
 
-        if(subtotalCalc == 0.00){
+        // Show or hide elements based on cart contents
+        if (subtotalCalc == 0.00) {
             binding.radioGroup.setVisibility(GONE);
             binding.cartList.setVisibility(GONE);
             binding.creditCardView.setVisibility(GONE);
-        }else{
+        } else {
             binding.cartEmptyPrompt.setVisibility(GONE);
         }
 
+        // Retrieve username and user ID
         username = getArguments().getString("username");
         userID = getArguments().getLong("id");
 
@@ -111,37 +116,43 @@ public class CartFragment extends Fragment implements cartAdapter.QuantityChange
         updatePrice(); // Update prices
     }
 
+    // Update the prices displayed on the UI
     private void updatePrice() {
-        taxCalc = subtotalCalc * 0.13;
-        totalCalc = subtotalCalc + taxCalc;
+        taxCalc = subtotalCalc * 0.13; // Calculate tax based on subtotal
+        totalCalc = subtotalCalc + taxCalc; // Calculate total including tax
 
+        // Display calculated values formatted as currency in the UI
         binding.subtotal.setText(String.format("$%.2f", subtotalCalc));
         binding.tax.setText(String.format("$%.2f", taxCalc));
         binding.total.setText(String.format("$%.2f", totalCalc));
     }
 
+    // Set up the toolbar menu for this fragment
     private void setToolbarMenu() {
         requireActivity().addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                // Inflate the menu layout and hide specific menu items
                 menuInflater.inflate(R.menu.main_menu, menu);
                 MenuItem searchView = menu.findItem(R.id.action_search);
                 MenuItem cart = menu.findItem(R.id.action_cart);
 
-                searchView.setVisible(false);
-                cart.setVisible(false);
+                searchView.setVisible(false); // Hide search view
+                cart.setVisible(false); // Hide cart view
             }
 
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                if (menuItem.getItemId() == android.R.id.home){
+                // Handle menu item selection, specifically the home/up button
+                if (menuItem.getItemId() == android.R.id.home) {
+                    // Navigate back to the previous fragment with username and userID data
                     Bundle bundlePass = new Bundle();
                     bundlePass.putString("username", username);
-                    bundlePass.putLong("id",userID);
+                    bundlePass.putLong("id", userID);
 
-                    NavHostFragment.findNavController(CartFragment.this).navigate(R.id.action_cartFragment_to_fourthFragment,bundlePass);
+                    NavHostFragment.findNavController(CartFragment.this)
+                            .navigate(R.id.action_cartFragment_to_fourthFragment, bundlePass);
                 }
-
                 return false;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
@@ -149,11 +160,13 @@ public class CartFragment extends Fragment implements cartAdapter.QuantityChange
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        // Set up functionality for order button click
         binding.orderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(adapter.getItemCount()>0) {
-                    makeOrder();
+                // Check if items are in the cart before placing an order
+                if (adapter.getItemCount() > 0) {
+                    makeOrder(); // Place the order
                     Toast.makeText(getActivity(), "Order has been placed", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getActivity(), "Please add an item to the Cart", Toast.LENGTH_SHORT).show();
@@ -161,9 +174,11 @@ public class CartFragment extends Fragment implements cartAdapter.QuantityChange
             }
         });
 
+        // Listen for changes in payment method selection (store/online)
         binding.radioStore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // Show the credit card view if "store" payment is selected
                 binding.creditCardView.setVisibility(View.VISIBLE);
             }
         });
@@ -171,26 +186,26 @@ public class CartFragment extends Fragment implements cartAdapter.QuantityChange
         binding.radioOnline.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // Hide the credit card view if "online" payment is selected
                 binding.creditCardView.setVisibility(GONE);
             }
         });
-
     }
 
-    public void makeOrder(){
-        //Toast.makeText(getActivity(), "Item Names"+adapter.getAllItemNames().toString(), Toast.LENGTH_SHORT).show();
+    // Place an order with the current cart items
+    public void makeOrder() {
+        // Create an orderModel and add it to the database
+        orderModel input = new orderModel(adapter.getAllItemNames().toString(), totalCalc, userID);
+        db.addOrder(input); // Add order to the database
 
-        orderModel input = new orderModel(adapter.getAllItemNames().toString(),totalCalc,userID);
+        adapter.clearCartInSharedPreferences(); // Clear cart items from SharedPreferences
 
-        db.addOrder(input);
-
-        adapter.clearCartInSharedPreferences();
-
+        // Navigate to the order end fragment with username and userID data
         Bundle bundlePass = new Bundle();
         bundlePass.putString("username", username);
-        bundlePass.putLong("id",userID);
+        bundlePass.putLong("id", userID);
 
-        NavHostFragment.findNavController(CartFragment.this).navigate(R.id.action_cartFragment_to_orderEndFragment,bundlePass);
+        NavHostFragment.findNavController(CartFragment.this)
+                .navigate(R.id.action_cartFragment_to_orderEndFragment, bundlePass);
     }
-
 }

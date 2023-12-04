@@ -68,52 +68,53 @@ public class FirstFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment using FragmentFirstBinding
         binding = FragmentFirstBinding.inflate(getLayoutInflater());
 
+        // Set up VideoView to play a video from resources
         videoView = (VideoView) binding.vvHomeBackground;
         Uri uri = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.mp_video);
         videoView.setVideoURI(uri);
-        videoView.start();
+        videoView.start(); // Start playing the video
 
+        // Loop the video when it's prepared
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
-
-                mediaPlayer.setLooping(true);
+                mediaPlayer.setLooping(true); // Set looping to true
             }
         });
 
-        return binding.getRoot();
+        return binding.getRoot(); // Return the root view of the binding
     }
 
     @Override
-    public void onResume(){
-        videoView.resume();
+    public void onResume() {
+        videoView.resume(); // Resume video playback
         super.onResume();
     }
 
     @Override
-    public void onPause(){
-        videoView.suspend();
+    public void onPause() {
+        videoView.suspend(); // Suspend video playback
         super.onPause();
     }
 
     @Override
-    public void onDestroy(){
-        videoView.stopPlayback();
+    public void onDestroy() {
+        videoView.stopPlayback(); // Stop video playback
         super.onDestroy();
     }
 
-
+    // Handle click events for buttons in the fragment
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         binding.btnLoginPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Navigate to the second fragment when the login button is clicked
                 NavHostFragment.findNavController(FirstFragment.this).navigate(R.id.action_firstFragment_to_secondFragment);
             }
         });
@@ -121,6 +122,7 @@ public class FirstFragment extends Fragment {
         binding.btnRegisterPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Navigate to the third fragment when the register button is clicked
                 NavHostFragment.findNavController(FirstFragment.this).navigate(R.id.action_firstFragment_to_thirdFragment);
             }
         });

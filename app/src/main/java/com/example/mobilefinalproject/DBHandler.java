@@ -99,6 +99,7 @@ public class DBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    // Add New User
     public void addUser(User inputAcc){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -111,6 +112,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    // Add New Review
     public void addReview(Long userId,int rating ,String reviewText){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -124,6 +126,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    // Get Reviews from DB
     public List<reviewModel> getReview(int rating){
         List<reviewModel> reviews = new ArrayList<>();
 
@@ -168,6 +171,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return reviews;
     }
 
+    // Add New Menu Item
     public void addItem(itemModel input){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -183,6 +187,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
         db.close();
     }
+
+    // Add to Users Order List
     public void addOrder(orderModel input){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -196,6 +202,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    // Grab Order List
     public List<orderModel> getOrders(long id){
         List<orderModel> orders = new ArrayList<>();
 

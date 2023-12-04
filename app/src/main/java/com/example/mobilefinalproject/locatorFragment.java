@@ -115,25 +115,27 @@ public class locatorFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentLocatorBinding.inflate(getLayoutInflater());
 
+        // Set up the toolbar
         toolbar = binding.menuBarLocator.toolbar;
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        if(((AppCompatActivity)getActivity()).getSupportActionBar()!=null){
-            Drawable drawable= getResources().getDrawable(R.drawable.back);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
+        if (((AppCompatActivity) requireActivity()).getSupportActionBar() != null) {
+            // Set a custom back arrow icon for the toolbar
+            Drawable drawable = getResources().getDrawable(R.drawable.back);
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
             Drawable newdrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 25, 25, true));
-            ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(newdrawable);
+            ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity) requireActivity()).getSupportActionBar().setHomeAsUpIndicator(newdrawable);
         }
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("");
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle("");
 
-
+        // Set up the toolbar menu
         setToolbarMenu();
 
+        // Initialize the map view
         mapView = binding.mapView;
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
@@ -142,54 +144,62 @@ public class locatorFragment extends Fragment implements OnMapReadyCallback {
         return binding.getRoot();
     }
 
+    // Method to set up the toolbar menu options
     private void setToolbarMenu() {
         requireActivity().addMenuProvider(new MenuProvider() {
-
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                // Inflate the main menu
                 menuInflater.inflate(R.menu.main_menu, menu);
                 MenuItem searchView = menu.findItem(R.id.action_search);
                 MenuItem cart = menu.findItem(R.id.action_cart);
 
+                // Hide search and cart options in the toolbar menu
                 searchView.setVisible(false);
                 cart.setVisible(false);
             }
 
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                if (menuItem.getItemId() == android.R.id.home){
+                // Handle menu item clicks
+                if (menuItem.getItemId() == android.R.id.home) {
+                    // Navigate back to the previous fragment
                     Bundle bundlePass = new Bundle();
                     bundlePass.putString("username", username);
-                    bundlePass.putLong("id",userID);
-
-                    NavHostFragment.findNavController(locatorFragment.this).navigate(R.id.action_locatorFragment_to_fourthFragment,bundlePass);
+                    bundlePass.putLong("id", userID);
+                    NavHostFragment.findNavController(locatorFragment.this).navigate(R.id.action_locatorFragment_to_fourthFragment, bundlePass);
                 }
-
                 return false;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        // Retrieve username and userID from the arguments
         username = getArguments().getString("username");
         userID = getArguments().getLong("id");
     }
 
+    // Callback method invoked when the map is ready
     @Override
     public void onMapReady(GoogleMap map) {
+        // Initialize Google Maps
         MapsInitializer.initialize(requireContext());
         this.googleMap = map;
 
+        // Enable zoom controls in the map UI
         googleMap.getUiSettings().setZoomControlsEnabled(true);
 
-        // Create a LatLng object with custom latitude and longitude
+        // Define a specific location (latitude and longitude) on the map
         LatLng store = new LatLng(43.8975, -78.9424);
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(store);
         markerOptions.title("The BurgerHood");
 
+        // Add a marker for the defined location on the map
         googleMap.addMarker(markerOptions);
 
+        // Check for location permission to enable the user's current location on the map
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             googleMap.setMyLocationEnabled(true);
 
@@ -202,7 +212,7 @@ public class locatorFragment extends Fragment implements OnMapReadyCallback {
                         }
                     });
         } else {
-            // Request location permission
+            // Request location permission if not granted
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         }
     }

@@ -70,14 +70,15 @@ public class orderViewFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentOrderViewBinding.inflate(getLayoutInflater());
 
+        // Set up the toolbar
         toolbar = binding.menuBarOrders.toolbar;
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         if(((AppCompatActivity)getActivity()).getSupportActionBar()!=null){
+            // Set custom back button
             Drawable drawable= getResources().getDrawable(R.drawable.back);
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
             Drawable newdrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 25, 25, true));
@@ -86,49 +87,57 @@ public class orderViewFragment extends Fragment {
         }
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("");
 
-
-        setToolbarMenu();
+        setToolbarMenu(); // Set up the toolbar menu
 
         return binding.getRoot();
     }
 
+    // Method to set up the toolbar menu
     private void setToolbarMenu() {
         requireActivity().addMenuProvider(new MenuProvider() {
-
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                // Inflate the menu items
                 menuInflater.inflate(R.menu.main_menu, menu);
                 MenuItem searchView = menu.findItem(R.id.action_search);
                 MenuItem cart = menu.findItem(R.id.action_cart);
 
+                // Hide search and cart items
                 searchView.setVisible(false);
                 cart.setVisible(false);
             }
 
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                if (menuItem.getItemId() == android.R.id.home){
+                if (menuItem.getItemId() == android.R.id.home) {
+                    // Navigate back to the fourth fragment when the home button is clicked
                     Bundle bundlePass = new Bundle();
                     bundlePass.putString("username", username);
-                    bundlePass.putLong("id",userID);
+                    bundlePass.putLong("id", userID);
 
-                    NavHostFragment.findNavController(orderViewFragment.this).navigate(R.id.action_orderViewFragment_to_fourthFragment,bundlePass);
+                    NavHostFragment.findNavController(orderViewFragment.this)
+                            .navigate(R.id.action_orderViewFragment_to_fourthFragment, bundlePass);
                 }
-
                 return false;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 
+    // Set up the fragment view when it's created
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        // Retrieve username and userID from arguments
         username = getArguments().getString("username");
         userID = getArguments().getLong("id");
+
+        // Retrieve orders for the user from the database
         List<orderModel> list = db.getOrders(userID);
 
+        // Show a message if the order list is empty
         if(list.isEmpty()){
             binding.noOrder.setVisibility(View.VISIBLE);
         }
 
+        // Set up RecyclerView to display orders using the adapter
         binding.ordersList.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new orderAdapter(getActivity(), list);
         binding.ordersList.setAdapter(adapter);

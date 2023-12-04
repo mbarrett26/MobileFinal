@@ -29,24 +29,30 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
     private List<itemModel> filteredItems;
     private List<itemModel> cart;
 
+    // JSON Keys
     private static final String CART_PREFS = "cart_prefs";
     private static final String CART_ITEMS_KEY = "cart_items";
 
+    // Constructor initializing the Adapter with context and items
     Adapter(Context context,List<itemModel> items){
         this.context = context;
         this.filteredItems = items;
 
+        // Initializing cart from SharedPreferences
         initCartFromSharedPreferences();
     }
 
+    // Inflating the layout for each item in the RecyclerView
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.custom_list_view, parent, false));
     }
 
+    // Binding data to the views in each RecyclerView item
     @Override
     public void onBindViewHolder(@NonNull Adapter.MyViewHolder holder, int position) {
+        // Extracting item details
         String name = filteredItems.get(position).getItemName();
         String price = "" + filteredItems.get(position).getPrice();
         byte[] imageByte = filteredItems.get(position).getImage();
@@ -54,32 +60,36 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
         String description = filteredItems.get(position).getDescription();
         String calories = "" + filteredItems.get(position).getCalories();
 
+        // Setting data to the views
         holder.nameOutput.setText(name);
         holder.descriptionOutput.setText(description);
         holder.priceCalorieOutput.setText(String.format("$%s | %s Cals", price, calories));
         holder.image.setImageBitmap(bitmap);
 
+        // Handling add button click for adding items to the cart
         holder.addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int currentItem = holder.getAdapterPosition();
                 itemModel selectedItem = filteredItems.get(currentItem);
                 addToCart(selectedItem);
-                //Toast.makeText(context, selectedItem.getItemName() + " has been Added to Cart", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    // Getting the number of items in the RecyclerView
     @Override
     public int getItemCount() {
         return filteredItems.size();
     }
 
+    // Filtering the list based on search query
     public void filterList(List<itemModel> filteredList) {
         this.filteredItems = filteredList;
         notifyDataSetChanged();
     }
 
+    // ViewHolder class for the RecyclerView items
     public class MyViewHolder extends RecyclerView.ViewHolder{
         TextView nameOutput;
         TextView descriptionOutput;
@@ -97,14 +107,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
         }
     }
 
+    // Adding an item to the cart
     private void addToCart(itemModel selectedItem) {
         int index = findItemIndex(selectedItem);
         if (index != -1) {
             // Item already exists in cart, increment its quantity
             int incrementQuantity = cart.get(index).getQuantity() + 1;
             cart.get(index).setQuantity(incrementQuantity);
-            //Toast.makeText(context, cart.get(index).getItemName() + ", " + cart.get(index).getQuantity(), Toast.LENGTH_SHORT).show();
         } else {
+            // Item doesn't exist in cart, add it with quantity 1
             itemModel newItem = new itemModel(
                     selectedItem.getItemName(),
                     selectedItem.getPrice(),
@@ -118,9 +129,11 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
             cart.add(newItem);
         }
 
+        // Save the updated cart to SharedPreferences
         saveCartToSharedPreferences();
     }
 
+    // Finding the index of an item in the cart
     private int findItemIndex(itemModel selectedItem) {
         if (cart != null) {
             for (int i = 0; i < cart.size(); i++) {
@@ -133,6 +146,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
         return -1; // Return -1 if the item is not found
     }
 
+    // Initializing the cart from SharedPreferences
     private void initCartFromSharedPreferences() {
         SharedPreferences sharedPreferences = context.getSharedPreferences(CART_PREFS, Context.MODE_PRIVATE);
         String cartItemsJson = sharedPreferences.getString(CART_ITEMS_KEY, "");
@@ -148,6 +162,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
         }
     }
 
+    // Saving the cart to SharedPreferences
     private void saveCartToSharedPreferences() {
         SharedPreferences sharedPreferences = context.getSharedPreferences(CART_PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();

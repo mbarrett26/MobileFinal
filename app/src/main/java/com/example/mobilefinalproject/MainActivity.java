@@ -14,7 +14,7 @@ import java.io.ByteArrayOutputStream;
 
 
 public class MainActivity extends AppCompatActivity{
-
+    //JSON Keys
     private static final String CART_PREFS = "cart_prefs";
     private static final String CART_ITEMS_KEY = "cart_items";
 
@@ -25,11 +25,18 @@ public class MainActivity extends AppCompatActivity{
         clearCartInSharedPreferences();
     }
 
-    public void clearCartInSharedPreferences(){
+    public void clearCartInSharedPreferences() {
+        // Get the SharedPreferences instance associated with the CART_PREFS key
         SharedPreferences sharedPreferences = this.getSharedPreferences(CART_PREFS, Context.MODE_PRIVATE);
+
+        // Create an editor to modify the SharedPreferences data
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        editor.putString(CART_ITEMS_KEY, "");
+        // Clear the stored value associated with the CART_ITEMS_KEY
+        editor.putString(CART_ITEMS_KEY, ""); // Setting an empty string to clear the value
+
+        // Apply the changes made to the SharedPreferences
         editor.apply();
     }
+
 }

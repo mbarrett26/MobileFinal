@@ -52,90 +52,91 @@ public class ThirdFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment using data binding
         binding = FragmentThirdBinding.inflate(getLayoutInflater());
 
-
-
+        // Setting up the VideoView to play a video
         videoView = (VideoView) binding.vvRegisterBackground;
         Uri uri = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.mp_video);
         videoView.setVideoURI(uri);
         videoView.start();
 
+        // Looping the video playback
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
-
                 mediaPlayer.setLooping(true);
             }
         });
 
-
         return binding.getRoot();
     }
 
-
     @Override
-    public void onResume(){
-    //    videoView.resume();
+    public void onResume() {
+        // Resuming video playback when the fragment resumes
         super.onResume();
     }
 
     @Override
-    public void onPause(){
-  //      videoView.suspend();
+    public void onPause() {
+        // Pausing video playback when the fragment is paused
         super.onPause();
     }
 
     @Override
-    public void onDestroy(){
-    //    videoView.stopPlayback();
+    public void onDestroy() {
+        // Stopping video playback when the fragment is destroyed
         super.onDestroy();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         db = new DBHandler(getActivity());
-        userInp=binding.edUsername;
-        passInp=binding.edPassword;
+        userInp = binding.edUsername;
+        passInp = binding.edPassword;
 
+        // Handling click events for buttons in the layout
         binding.btnReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               NavHostFragment.findNavController(ThirdFragment.this).navigate(R.id.action_thirdFragment_to_firstFragment);
+                // Navigating to the FirstFragment
+                NavHostFragment.findNavController(ThirdFragment.this).navigate(R.id.action_thirdFragment_to_firstFragment);
             }
         });
+
         binding.btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Registering the user when the register button is clicked
                 registerUser();
+                // Navigating back to the FirstFragment after registration
                 NavHostFragment.findNavController(ThirdFragment.this).navigate(R.id.action_thirdFragment_to_firstFragment);
             }
         });
     }
 
-    public void registerUser(){
+    public void registerUser() {
+        // Retrieving username and password from EditText fields
         String userName = String.valueOf(userInp.getText()).trim();
         String userPass = String.valueOf(passInp.getText()).trim();
 
-        if (!(userName.isEmpty() || userPass.isEmpty())){
-            User reg = new User(userName,userPass);  //Creating a new user object.
-           //Toast.makeText(getActivity(), "Valid user input", Toast.LENGTH_SHORT).show();
+        // Validating user input for username and password
+        if (!(userName.isEmpty() || userPass.isEmpty())) {
+            User reg = new User(userName, userPass); // Creating a new user object
 
-            if (!(db.checkUser(userName))){
+            if (!(db.checkUser(userName))) {
+                // Adding the user to the database if the username is not already taken
                 db.addUser(reg);
                 Toast.makeText(getActivity(), "User Added", Toast.LENGTH_SHORT).show();
-            } else{
-                Toast.makeText(getActivity(), "User already exists. Please change username", Toast.LENGTH_SHORT).show();
+            } else {
+                // Displaying a message if the username already exists
+                Toast.makeText(getActivity(), "User already exists. Please change the username", Toast.LENGTH_SHORT).show();
             }
-
-           //new Thread(reg).start();  //starting the registration thread.
-        }else{
+        } else {
+            // Displaying a message for invalid form input
             Toast.makeText(getActivity(), "Invalid form input", Toast.LENGTH_SHORT).show();
         }
-
     }
 }

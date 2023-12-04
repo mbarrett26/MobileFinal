@@ -72,22 +72,23 @@ public class orderEndFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentOrderEndBinding.inflate(getLayoutInflater());
 
+        // Create a Handler on the main looper to delay navigation
         handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                navigateToFourthFragment();
+                navigateToFourthFragment(); // Navigate to the fourth fragment after a delay
             }
-        }, 5000);
+        }, 5000); // Delay of 5000 milliseconds (5 seconds)
 
         return binding.getRoot();
     }
 
+    // Method to navigate to the fourth fragment
     private void navigateToFourthFragment() {
         NavHostFragment.findNavController(this)
                 .navigate(R.id.action_orderEndFragment_to_fourthFragment, makeBundle());
@@ -96,17 +97,19 @@ public class orderEndFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        // Remove any pending callbacks to prevent leaks
+        // Remove any pending callbacks to prevent leaks when the view is destroyed
         if (handler != null) {
             handler.removeCallbacksAndMessages(null);
         }
     }
 
-    private Bundle makeBundle(){ //used to make the bundle that is passed between fragments
+    // Method to create a Bundle used for passing data between fragments
+    private Bundle makeBundle() {
         Bundle bundle = new Bundle();
         bundle.putString("username", username);
-        bundle.putLong("id",userID);
+        bundle.putLong("id", userID);
 
         return bundle;
     }
+
 }
