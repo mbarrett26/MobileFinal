@@ -1,29 +1,58 @@
 package com.example.mobilefinalproject;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.MenuItemCompat;
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Lifecycle;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
+import androidx.navigation.fragment.NavHostFragment;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.mobilefinalproject.databinding.FragmentLocatorBinding;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.PolyUtil;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -32,12 +61,15 @@ import java.util.List;
  * Use the {@link locatorFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class locatorFragment extends Fragment {
+public class locatorFragment extends Fragment implements OnMapReadyCallback {
 
     private FragmentLocatorBinding binding;
     private Toolbar toolbar;
     String username;
     Long userID;
+    private GoogleMap googleMap;
+    private MapView mapView;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -77,6 +109,9 @@ public class locatorFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        ActivityCompat.requestPermissions(requireActivity(),
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
     }
 
     @Override
@@ -98,6 +133,11 @@ public class locatorFragment extends Fragment {
 
 
         setToolbarMenu();
+
+        mapView = binding.mapView;
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+        mapView.getMapAsync((OnMapReadyCallback) this);
 
         return binding.getRoot();
     }
@@ -133,5 +173,62 @@ public class locatorFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         username = getArguments().getString("username");
         userID = getArguments().getLong("id");
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        MapsInitializer.initialize(requireContext());
+        this.googleMap = map;
+
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
+
+        // Create a LatLng object with custom latitude and longitude
+        LatLng store = new LatLng(43.8975, -78.9424);
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(store);
+        markerOptions.title("The BrotherHood");
+
+        googleMap.addMarker(markerOptions);
+
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            googleMap.setMyLocationEnabled(true);
+
+            // Get the user's last known location and move the camera there
+            FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(requireActivity(), location -> {
+                        if (location != null) {
+                            LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 13f));
+                        }
+                    });
+        } else {
+            // Request location permission
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
     }
 }
