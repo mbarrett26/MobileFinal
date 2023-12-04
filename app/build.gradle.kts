@@ -62,10 +62,10 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer-dash:1.1.1")
     implementation("androidx.media3:media3-ui:1.1.1")
     implementation("com.google.android.material:material:1.5.0")
-    implementation("com.google.code.gson:gson:2.8.8")
     implementation("com.github.fevziomurtekin:PayView:1.0.3")
     implementation("com.github.KunikaValecha:CreditCardView:1.0")
     implementation("com.android.volley:volley:1.2.1")
     implementation("com.google.maps.android:android-maps-utils:2.2.0")
+    implementation("com.google.code.gson:gson:2.8.8")
 
 }

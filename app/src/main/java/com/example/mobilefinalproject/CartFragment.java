@@ -154,6 +154,7 @@ public class CartFragment extends Fragment implements cartAdapter.QuantityChange
             public void onClick(View v) {
                 if(adapter.getItemCount()>0) {
                     makeOrder();
+                    Toast.makeText(getActivity(), "Order has been placed", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getActivity(), "Please add an item to the Cart", Toast.LENGTH_SHORT).show();
                 }
@@ -189,7 +190,7 @@ public class CartFragment extends Fragment implements cartAdapter.QuantityChange
         bundlePass.putString("username", username);
         bundlePass.putLong("id",userID);
 
-        NavHostFragment.findNavController(CartFragment.this).navigate(R.id.action_cartFragment_to_fourthFragment,bundlePass);
+        NavHostFragment.findNavController(CartFragment.this).navigate(R.id.action_cartFragment_to_orderEndFragment,bundlePass);
     }
 
 }

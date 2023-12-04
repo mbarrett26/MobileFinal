@@ -103,6 +103,9 @@
         <action
             android:id="@+id/action_cartFragment_to_fourthFragment"
             app:destination="@id/fourthFragment" />
+        <action
+            android:id="@+id/action_cartFragment_to_orderEndFragment"
+            app:destination="@id/orderEndFragment" />
     </fragment>
     <fragment
         android:id="@+id/locatorFragment"
@@ -111,6 +114,15 @@
         tools:layout="@layout/fragment_locator" >
         <action
             android:id="@+id/action_locatorFragment_to_fourthFragment"
+            app:destination="@id/fourthFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderEndFragment"
+        android:name="com.example.mobilefinalproject.orderEndFragment"
+        android:label="fragment_order_end"
+        tools:layout="@layout/fragment_order_end" >
+        <action
+            android:id="@+id/action_orderEndFragment_to_fourthFragment"
             app:destination="@id/fourthFragment" />
     </fragment>
 </navigation>

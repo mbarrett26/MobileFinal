@@ -103,13 +103,18 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
         DBHandler db = new DBHandler(getActivity());
 
         byte[] burger = bitmapToByte(getResources().getDrawable(R.drawable.burger));
+        byte[] fries = bitmapToByte(getResources().getDrawable(R.drawable.fries));
+        byte[] apps = bitmapToByte(getResources().getDrawable(R.drawable.apps));
+        byte[] milkshake = bitmapToByte(getResources().getDrawable(R.drawable.milkshake));
+        byte[] cake = bitmapToByte(getResources().getDrawable(R.drawable.cake));
 
-/*
+
+    /*
         db.addItem(new itemModel("Tex-Mex Burger", 11.49, burger, "Beef patty topped with spicy jalapeños, pepper jack cheese, guacamole, and salsa", 690, "Specialties"));
-        db.addItem(new itemModel("Cajun Sweet Potato Fries", 5.49, burger, "Sweet potato fries seasoned with Cajun spices, served with a zesty dipping sauce", 340, "Sides"));
-        db.addItem(new itemModel("Garlic Herb Knots", 6.99, burger, "Soft garlic knots brushed with herb-infused butter, served with marinara sauce", 280, "Appetizers & Salads"));
-        db.addItem(new itemModel("Berry Blast Smoothie", 6.29, burger, "A refreshing blend of mixed berries, yogurt, and honey", 220, "Beverages"));
-        db.addItem(new itemModel("Red Velvet Cupcake", 4.99, burger, "Moist red velvet cupcake topped with cream cheese frosting", 280, "Desserts"));
+        db.addItem(new itemModel("Cajun Sweet Potato Fries", 5.49, fries, "Sweet potato fries seasoned with Cajun spices, served with a zesty dipping sauce", 340, "Sides"));
+        db.addItem(new itemModel("Garlic Herb Knots", 6.99, apps, "Soft garlic knots brushed with herb-infused butter, served with marinara sauce", 280, "Appetizers & Salads"));
+        db.addItem(new itemModel("Berry Blast Smoothie", 6.29, milkshake, "A refreshing blend of mixed berries, yogurt, and honey", 220, "Beverages"));
+        db.addItem(new itemModel("Red Velvet Cupcake", 4.99, cake, "Moist red velvet cupcake topped with cream cheese frosting", 280, "Desserts"));
 
 
 
@@ -151,29 +156,29 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
         db.addItem(new itemModel("Black Bean Beet Burger", 10.49, burger, "Black bean and beetroot patty, avocado, and spicy aioli", 490, "Vegan Options"));
 
         //---------------------------
-        db.addItem(new itemModel("Garlic Parmesan Fries", 4.49, burger, "Crispy fries tossed in garlic butter and Parmesan cheese", 350, "Sides"));
-        db.addItem(new itemModel("Sweet Potato Fries", 4.99, burger, "Crispy sweet potato fries served with chipotle mayo", 320, "Sides"));
-        db.addItem(new itemModel("Onion Rings", 5.29, burger, "Golden-brown battered onion rings with a side of ranch", 380, "Sides"));
-        db.addItem(new itemModel("Chili Cheese Fries", 6.49, burger, "Fries smothered in beef chili and melted cheddar cheese", 480, "Sides"));
-        db.addItem(new itemModel("Garlic Breadsticks", 4.79, burger, "Warm garlic-infused breadsticks served with marinara sauce", 280, "Sides"));
+        db.addItem(new itemModel("Garlic Parmesan Fries", 4.49, fries, "Crispy fries tossed in garlic butter and Parmesan cheese", 350, "Sides"));
+        db.addItem(new itemModel("Sweet Potato Fries", 4.99, fries, "Crispy sweet potato fries served with chipotle mayo", 320, "Sides"));
+        db.addItem(new itemModel("Onion Rings", 5.29, fries, "Golden-brown battered onion rings with a side of ranch", 380, "Sides"));
+        db.addItem(new itemModel("Chili Cheese Fries", 6.49, fries, "Fries smothered in beef chili and melted cheddar cheese", 480, "Sides"));
+        db.addItem(new itemModel("Garlic Breadsticks", 4.79, fries, "Warm garlic-infused breadsticks served with marinara sauce", 280, "Sides"));
 
-        db.addItem(new itemModel("Loaded Nachos", 7.99, burger, "Crispy tortilla chips topped with cheese, jalapeños, salsa, and sour cream", 450, "Appetizers & Salads"));
-        db.addItem(new itemModel("Mac and Cheese Bites", 5.99, burger, "Creamy macaroni and cheese bites served with marinara sauce", 410, "Appetizers & Salads"));
-        db.addItem(new itemModel("Coleslaw", 3.49, burger, "Freshly shredded cabbage and carrots in a tangy dressing", 150, "Appetizers & Salads"));
-        db.addItem(new itemModel("Bacon Jalapeño Poppers", 6.99, burger, "Jalapeños stuffed with cream cheese and wrapped in bacon", 320, "Appetizers & Salads"));
-        db.addItem(new itemModel("Seasonal Veggie Salad", 7.49, burger, "Mixed greens, seasonal vegetables, and vinaigrette dressing", 180, "Appetizers & Salads"));
+        db.addItem(new itemModel("Loaded Nachos", 7.99, apps, "Crispy tortilla chips topped with cheese, jalapeños, salsa, and sour cream", 450, "Appetizers & Salads"));
+        db.addItem(new itemModel("Mac and Cheese Bites", 5.99, apps, "Creamy macaroni and cheese bites served with marinara sauce", 410, "Appetizers & Salads"));
+        db.addItem(new itemModel("Coleslaw", 3.49, apps, "Freshly shredded cabbage and carrots in a tangy dressing", 150, "Appetizers & Salads"));
+        db.addItem(new itemModel("Bacon Jalapeño Poppers", 6.99, apps, "Jalapeños stuffed with cream cheese and wrapped in bacon", 320, "Appetizers & Salads"));
+        db.addItem(new itemModel("Seasonal Veggie Salad", 7.49, apps, "Mixed greens, seasonal vegetables, and vinaigrette dressing", 180, "Appetizers & Salads"));
 
-        db.addItem(new itemModel("Classic Milkshake", 4.99, burger, "Creamy vanilla milkshake topped with whipped cream", 350, "Beverages"));
-        db.addItem(new itemModel("Iced Caramel Latte", 5.49, burger, "Iced coffee with caramel syrup and frothy milk", 210, "Beverages"));
-        db.addItem(new itemModel("Freshly Squeezed Lemonade", 3.99, burger, "Refreshing lemonade made with freshly squeezed lemons", 120, "Beverages"));
-        db.addItem(new itemModel("Green Tea Smoothie", 5.79, burger, "Blended green tea with spinach, banana, and honey", 280, "Beverages"));
-        db.addItem(new itemModel("Craft Soda", 4.29, burger, "Locally brewed artisanal soda in various flavors", 180, "Beverages"));
+        db.addItem(new itemModel("Classic Milkshake", 4.99, milkshake, "Creamy vanilla milkshake topped with whipped cream", 350, "Beverages"));
+        db.addItem(new itemModel("Iced Caramel Latte", 5.49, milkshake, "Iced coffee with caramel syrup and frothy milk", 210, "Beverages"));
+        db.addItem(new itemModel("Freshly Squeezed Lemonade", 3.99, milkshake, "Refreshing lemonade made with freshly squeezed lemons", 120, "Beverages"));
+        db.addItem(new itemModel("Green Tea Smoothie", 5.79, milkshake, "Blended green tea with spinach, banana, and honey", 280, "Beverages"));
+        db.addItem(new itemModel("Craft Soda", 4.29, milkshake, "Locally brewed artisanal soda in various flavors", 180, "Beverages"));
 
-        db.addItem(new itemModel("Decadent Chocolate Brownie", 4.49, burger, "Rich chocolate brownie served warm with vanilla ice cream", 420, "Desserts"));
-        db.addItem(new itemModel("Classic Apple Pie", 5.99, burger, "Homemade apple pie with a flaky crust, served with whipped cream", 320, "Desserts"));
-        db.addItem(new itemModel("Gourmet Cheesecake", 6.49, burger, "Creamy cheesecake topped with seasonal fruit compote", 380, "Desserts"));
-        db.addItem(new itemModel("Cinnamon Sugar Churros", 4.79, burger, "Crispy churros coated in cinnamon sugar, served with chocolate sauce", 340, "Desserts"));
-        db.addItem(new itemModel("Fruit Sorbet Sampler", 7.29, burger, "Assorted fruit sorbets served in a trio of flavors", 250, "Desserts"));
+        db.addItem(new itemModel("Decadent Chocolate Brownie", 4.49, cake, "Rich chocolate brownie served warm with vanilla ice cream", 420, "Desserts"));
+        db.addItem(new itemModel("Classic Apple Pie", 5.99, cake, "Homemade apple pie with a flaky crust, served with whipped cream", 320, "Desserts"));
+        db.addItem(new itemModel("Gourmet Cheesecake", 6.49, cake, "Creamy cheesecake topped with seasonal fruit compote", 380, "Desserts"));
+        db.addItem(new itemModel("Cinnamon Sugar Churros", 4.79, cake, "Crispy churros coated in cinnamon sugar, served with chocolate sauce", 340, "Desserts"));
+        db.addItem(new itemModel("Fruit Sorbet Sampler", 7.29, cake, "Assorted fruit sorbets served in a trio of flavors", 250, "Desserts"));
 */
     }
 
@@ -270,7 +275,7 @@ public class FourthFragment extends Fragment implements NavigationView.OnNavigat
                 break;
 
             case R.id.userLogout:
-                Toast.makeText(getActivity(), output + " has Logged out", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), output + " has Logged out", Toast.LENGTH_SHORT).show();
                 NavHostFragment.findNavController(FourthFragment.this).navigate(R.id.action_fourthFragment_to_firstFragment);
                 break;
         }
