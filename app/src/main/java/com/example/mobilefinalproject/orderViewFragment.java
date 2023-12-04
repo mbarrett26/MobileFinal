@@ -125,6 +125,10 @@ public class orderViewFragment extends Fragment {
         userID = getArguments().getLong("id");
         List<orderModel> list = db.getOrders(userID);
 
+        if(list.isEmpty()){
+            binding.noOrder.setVisibility(View.VISIBLE);
+        }
+
         binding.ordersList.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new orderAdapter(getActivity(), list);
         binding.ordersList.setAdapter(adapter);

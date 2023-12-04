@@ -177,7 +177,7 @@ public class CartFragment extends Fragment implements cartAdapter.QuantityChange
     }
 
     public void makeOrder(){
-        Toast.makeText(getActivity(), "Item Names"+adapter.getAllItemNames().toString(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Item Names"+adapter.getAllItemNames().toString(), Toast.LENGTH_SHORT).show();
 
         orderModel input = new orderModel(adapter.getAllItemNames().toString(),totalCalc,userID);
 

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
@@ -113,7 +114,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
                     selectedItem.getCategory()
             );
             newItem.setQuantity(1);
-            //Toast.makeText(context, newItem.getItemName() + ", " + newItem.getQuantity(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, newItem.getItemName() + " has Been Added to Cart", Toast.LENGTH_LONG).show();
             cart.add(newItem);
         }
 
@@ -159,5 +160,4 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
         editor.putString(CART_ITEMS_KEY, cartItemsJson);
         editor.apply();
     }
-
 }

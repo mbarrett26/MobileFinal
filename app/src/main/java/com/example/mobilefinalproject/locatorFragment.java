@@ -186,7 +186,7 @@ public class locatorFragment extends Fragment implements OnMapReadyCallback {
         LatLng store = new LatLng(43.8975, -78.9424);
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(store);
-        markerOptions.title("The BrotherHood");
+        markerOptions.title("The BurgerHood");
 
         googleMap.addMarker(markerOptions);
 

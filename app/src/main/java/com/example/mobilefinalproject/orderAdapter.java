@@ -29,7 +29,7 @@ public class orderAdapter extends RecyclerView.Adapter<orderAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(@NonNull orderAdapter.MyViewHolder holder, int position) {
         String items = "Order Items: " + orderList.get(position).getOrderList();
-        String price = "Order Price: " + orderList.get(position).getTotal();
+        String price = "Order Price: $" + String.format("%.2f", orderList.get(position).getTotal());
 
         holder.orderItems.setText(items);
         holder.orderPrice.setText(price);
