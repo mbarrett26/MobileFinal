@@ -36,7 +36,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String DB_Table_3 = "orderData";
     private static final String Col_userid_3 = "userid";
     private static final String Col_order_3 = "userorders";
-    private static final String Col_total_3 = "total"; //could also add location after
+    private static final String Col_total_3 = "total";
 
 
     private static final String DB_Table_4 = "reviewData";
@@ -90,7 +90,7 @@ public class DBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void deleteDB(){
+    public void deleteDB(){ //function to delete the DB.
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + DB_Table_1);
         db.execSQL("DROP TABLE IF EXISTS " + DB_Table_2);
@@ -99,7 +99,7 @@ public class DBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // Add New User
+    // Method Add New User to the DB, using a model class
     public void addUser(User inputAcc){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -384,7 +384,8 @@ public class DBHandler extends SQLiteOpenHelper {
         return userName;
     }
 
-    public boolean checkOrder(long userID){
+
+    public boolean checkOrder(long userID){ //function to query the DB to check if a user made an Order
         String[] columns = {
                 Col_userid_3
         };
@@ -407,7 +408,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return cursorCount > 0;
     }
-    public boolean checkUser(String nameInput) {
+    public boolean checkUser(String nameInput) { //function to check if a username exists in the DB.
         // array of columns to fetch
         String[] columns = {
                 Col_ID
@@ -436,7 +437,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     // Method to check the existence of a user account in the database
-    public boolean checkAcc(User acc) {
+    public boolean checkAcc(User acc) { //function to verify the account information in the database using a User model class.
         // Array of columns to fetch
         String[] columns = {Col_ID};
 
