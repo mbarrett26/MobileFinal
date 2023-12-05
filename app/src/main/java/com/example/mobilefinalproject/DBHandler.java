@@ -112,19 +112,26 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    // Add New Review
-    public void addReview(Long userId,int rating ,String reviewText){
+    // Method to add a new review to the database
+    public void addReview(Long userId, int rating, String reviewText){
+        // Get a writable database instance
         SQLiteDatabase db = this.getWritableDatabase();
+
+        // Create ContentValues to hold review data
         ContentValues values = new ContentValues();
 
-        values.put(Col_userid_4, userId);
-        values.put(Col_rating_4,rating);
-        values.put(Col_reviewdata_4, reviewText);
+        // Put review details into ContentValues
+        values.put(Col_userid_4, userId); // User ID associated with the review
+        values.put(Col_rating_4, rating); // Rating given in the review
+        values.put(Col_reviewdata_4, reviewText); // Text content of the review
 
+        // Insert the review data into the specified table
         db.insert(DB_Table_4, null, values);
 
+        // Close the database connection
         db.close();
     }
+
 
     // Get Reviews from DB
     public List<reviewModel> getReview(int rating){
@@ -171,36 +178,45 @@ public class DBHandler extends SQLiteOpenHelper {
         return reviews;
     }
 
-    // Add New Menu Item
+    // Method to add a new menu item to the database
     public void addItem(itemModel input){
+        // Get a writable database instance
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(Col_name_2, input.getItemName());
-        values.put(Col_price_2, input.getPrice());
-        values.put(Col_image_2, input.getImage());
-        values.put(Col_description_2, input.getDescription());
-        values.put(Col_calories_2, input.getCalories());
-        values.put(Col_category_2, input.getCategory());
+        // Put item details into ContentValues
+        values.put(Col_name_2, input.getItemName()); // Name of the item
+        values.put(Col_price_2, input.getPrice()); // Price of the item
+        values.put(Col_image_2, input.getImage()); // Image associated with the item
+        values.put(Col_description_2, input.getDescription()); // Description of the item
+        values.put(Col_calories_2, input.getCalories()); // Calories of the item
+        values.put(Col_category_2, input.getCategory()); // Category of the item
 
+        // Insert the item data into the specified table
         db.insert(DB_Table_2, null, values);
 
+        // Close the database connection
         db.close();
     }
 
-    // Add to Users Order List
+    // Method to add an order to the user's order list in the database
     public void addOrder(orderModel input){
+        // Get a writable database instance
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(Col_userid_3, input.getUserID());
-        values.put(Col_order_3, input.getOrderList());
-        values.put(Col_total_3, input.getTotal());
+        // Put order details into ContentValues
+        values.put(Col_userid_3, input.getUserID()); // User ID associated with the order
+        values.put(Col_order_3, input.getOrderList()); // List of items in the order
+        values.put(Col_total_3, input.getTotal()); // Total amount for the order
 
+        // Insert the order data into the specified table
         db.insert(DB_Table_3, null, values);
 
+        // Close the database connection
         db.close();
     }
+
 
     // Grab Order List
     public List<orderModel> getOrders(long id){
@@ -242,15 +258,28 @@ public class DBHandler extends SQLiteOpenHelper {
         return orders;
     }
 
+    // This method retrieves items from a database table named DB_Table_2, ordering them by Col_ID in descending order.
     public List<itemModel> getItems(){
+        // Initialize a list to hold itemModel objects retrieved from the database.
         List<itemModel> items = new ArrayList<>();
+
+        // Construct the query to select all items from the table and order them by Col_ID in descending order.
         String query = "SELECT * FROM " + DB_Table_2 +" ORDER BY "+ Col_ID +" DESC";
+
+        // Get a readable database instance.
         SQLiteDatabase db = this.getReadableDatabase();
+
+        // Execute the query and retrieve the result as a Cursor object.
         Cursor cursor = db.rawQuery(query,null);
 
+        // Check if the cursor can move to the first row.
         if(cursor.moveToFirst()){
+            // Iterate through the cursor to extract data and create itemModel objects.
             do{
+                // Create a new itemModel object.
                 itemModel item = new itemModel();
+
+                // Set attributes of the itemModel object based on the cursor's data.
                 item.setId(Long.parseLong(cursor.getString(0)));
                 item.setItemName(cursor.getString(1));
                 item.setPrice(Double.parseDouble(cursor.getString(2)));
@@ -258,51 +287,70 @@ public class DBHandler extends SQLiteOpenHelper {
                 item.setDescription(cursor.getString(4));
                 item.setCalories(Integer.parseInt(cursor.getString(5)));
                 item.setCategory(cursor.getString(6));
+
+                // Add the itemModel object to the list.
                 items.add(item);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext()); // Move to the next row in the cursor.
         }
+
+        // Close the cursor and return the list of itemModel objects retrieved from the database.
         return items;
     }
 
+
+    // Method to retrieve a list of users from the database
     public List<User> getUsers(){
+        // Create a list to hold User objects
         List<User> users = new ArrayList<>();
+
+        // Formulate the SQL query
         String query = "SELECT * FROM " + DB_Table_1 +" ORDER BY "+ Col_ID +" DESC";
+
+        // Get a readable database instance
         SQLiteDatabase db = this.getReadableDatabase();
+
+        // Execute the raw SQL query
         Cursor cursor = db.rawQuery(query,null);
 
+        // Check if the cursor contains any data
         if(cursor.moveToFirst()){
+            // Iterate through the cursor rows
             do{
+                // Create a new User object
                 User user = new User();
+
+                // Set User object properties from cursor data
                 user.setId(Long.parseLong(cursor.getString(0)));
                 user.setUsername(cursor.getString(1));
                 user.setPassword(cursor.getString(2));
+
+                // Add User object to the list
                 users.add(user);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext()); // Move to the next row in the cursor
         }
+
+        // Close the cursor and database
+        cursor.close();
+        db.close();
+
+        // Return the list of users
         return users;
     }
 
+
+    // Method to retrieve user ID based on username
     public long getUserID(String nameInput){
-
-        long userID =0 ;
-
-        String[] columns = {
-                Col_ID
-        };
+        long userID = 0 ;
+        String[] columns = {Col_ID};
         SQLiteDatabase db = this.getReadableDatabase();
-        // selection criteria
-        String selection = Col_Username_1 + " = ?";
-        // selection argument
-        String[] selectionArgs = {nameInput.toLowerCase()};
-        // query user table with condition
 
-        Cursor cursor = db.query(DB_Table_1, //Table to query
-                columns,                    //columns to return
-                selection,                  //columns for the WHERE clause
-                selectionArgs,              //The values for the WHERE clause
-                null,                       //group the rows
-                null,                      //filter by row groups
-                null);                      //The sort order
+        // Selection criteria
+        String selection = Col_Username_1 + " = ?";
+        // Selection argument
+        String[] selectionArgs = {nameInput.toLowerCase()};
+
+        // Query user table with condition
+        Cursor cursor = db.query(DB_Table_1, columns, selection, selectionArgs, null, null, null);
 
         if(cursor.moveToFirst()){
             userID = Long.parseLong(cursor.getString(0));
@@ -313,27 +361,19 @@ public class DBHandler extends SQLiteOpenHelper {
         return userID;
     }
 
+    // Method to retrieve username based on user ID
     public String getUserName(long idInput){
-
         String userName = "";
-
-        String[] columns = {
-                Col_Username_1
-        };
+        String[] columns = {Col_Username_1};
         SQLiteDatabase db = this.getReadableDatabase();
-        // selection criteria
-        String selection = Col_ID + " = ?";
-        // selection argument
-        String[] selectionArgs = {String.valueOf(idInput)};
-        // query user table with condition
 
-        Cursor cursor = db.query(DB_Table_1, //Table to query
-                columns,                    //columns to return
-                selection,                  //columns for the WHERE clause
-                selectionArgs,              //The values for the WHERE clause
-                null,                       //group the rows
-                null,                      //filter by row groups
-                null);                      //The sort order
+        // Selection criteria
+        String selection = Col_ID + " = ?";
+        // Selection argument
+        String[] selectionArgs = {String.valueOf(idInput)};
+
+        // Query user table with condition
+        Cursor cursor = db.query(DB_Table_1, columns, selection, selectionArgs, null, null, null);
 
         if(cursor.moveToFirst()){
             userName = cursor.getString(0);
@@ -395,32 +435,40 @@ public class DBHandler extends SQLiteOpenHelper {
         return false;
     }
 
+    // Method to check the existence of a user account in the database
     public boolean checkAcc(User acc) {
-        // array of columns to fetch
-        String[] columns = {
-                Col_ID
-        };
-        SQLiteDatabase db = this.getReadableDatabase();
-        // selection criteria
-        String selection = Col_Username_1 + " = ?" + " AND " + Col_Password_1 + " = ?";
-        // selection arguments
-        String[] selectionArgs = {acc.getUsername().toLowerCase(), acc.getPassword()};
-        // query user table with conditions
+        // Array of columns to fetch
+        String[] columns = {Col_ID};
 
-        Cursor cursor = db.query(DB_Table_1, //Table to query
-                columns,                    //columns to return
-                selection,                  //columns for the WHERE clause
-                selectionArgs,              //The values for the WHERE clause
-                null,                       //group the rows
-                null,                       //filter by row groups
-                null);                      //The sort order
+        // Get a readable database instance
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Selection criteria for username and password
+        String selection = Col_Username_1 + " = ?" + " AND " + Col_Password_1 + " = ?";
+
+        // Selection arguments for the username and password
+        String[] selectionArgs = {acc.getUsername().toLowerCase(), acc.getPassword()};
+
+        // Query the user table with conditions
+        Cursor cursor = db.query(
+                DB_Table_1,     // Table to query
+                columns,        // Columns to return
+                selection,      // Columns for the WHERE clause
+                selectionArgs,  // The values for the WHERE clause
+                null,           // Group the rows
+                null,           // Filter by row groups
+                null            // The sort order
+        );
+
+        // Get the count of rows returned by the query
         int cursorCount = cursor.getCount();
+
+        // Close the cursor and database
         cursor.close();
         db.close();
-        if (cursorCount > 0) {
-            return true;
-        }
-        return false;
+
+        // Return true if the query returned at least one row, indicating the existence of the account
+        return cursorCount > 0;
     }
 }
 
