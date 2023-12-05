@@ -16,16 +16,9 @@ Briefly describe the project and its main goals or functionalities.
 ## Installation
 Instructions for installation:
 1. Clone the repository: `git clone https://github.com/Mithusan/MobileFinalProject.git`
-2. Navigate to the project folder: `cd MobileFinalProject`
-3. Install dependencies: `./gradlew build`
+2. Install dependencies: `./gradlew build`
 
 ## Usage
 Steps to run the project:
-1. [Explain any additional setup or configuration]
-2. [Provide commands or steps to run the project]
-
-## Features
-- [Feature 1: Description]
-- [Feature 2: Description]
-- [Feature 3: Description]
-- ...
+1. Open the project in Android Studio 
+2. Run the application on an Emulated Android Device
