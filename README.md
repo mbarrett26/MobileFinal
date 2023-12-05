@@ -8,7 +8,6 @@ This project aims to revolutionize food ordering by providing a seamless mobile 
 ## Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
-- [Features](#features)
 
 ## Installation
 To get started with the app, follow these steps:
@@ -21,5 +20,3 @@ Here's how you can run the project:
 
 1. Open the project in Android Studio.
 2. Run the application on an Emulated Android Device.
-
-Feel free to explore the app and experience the convenience of mobile food ordering firsthand! For more details on the app's functionalities, continue to the [Features](#features) section.
