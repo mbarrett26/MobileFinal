@@ -1,6 +1,6 @@
 # Mobile Food Ordering Application
 
-Welcome to the Mobile Food Ordering Application developed by Group 13, consisting of Mithusan Arulampalam, Banujan Sutheswaran, and Micheal Barrett.
+Welcome to the Mobile Food Ordering Application developed by Group 13, consisting of Mithusan Arulampalam, Banujan Sutheswaran, and Michael Barrett.
 
 ## Overview
 This project aims to revolutionize food ordering by providing a seamless mobile experience. Our primary goal is to create an intuitive application that simplifies the process of ordering food while offering an array of functionalities for both users and restaurants.
